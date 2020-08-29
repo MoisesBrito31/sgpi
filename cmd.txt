@@ -16,9 +16,12 @@ git commit -m "mensagem sua"  #faz o commit
 ------------------------------------------------------------------------
 comando para fazer a publicação no heroku
 
-heroku login                                            # faz o login na sua conta do heroku
-heroku apps:create nomeDoAPP --builpack heroku/python   # cria um app no heroku
-git push heroku master                                  # faz o push para o servidor
+heroku login                                                # faz o login na sua conta do heroku
+heroku apps:create nomeDoAPP --builpack heroku/python       # cria um app no heroku
+git push heroku master                                      # faz o push para o servidor
+heroku run python manage.py makemigrations                  # faz a migração das tabelas para o banco
+heroku run python manage.py migrate                         # atualiza o banco
+heroku run python manage.py createsuperuser                 # adiciona o usuario 
 
 ------------------------------------------------------------------------
 
