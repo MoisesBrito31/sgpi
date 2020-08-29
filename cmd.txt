@@ -6,10 +6,19 @@ pip install psycopg2-binary       #utilitario para a biblioteca acima
 pip install django-stdimage       #adiministração de imagens
 pip install django-bootstrap4     #bootstrap4 dinamico 
 
---------------
+------------------------------------------------------------------------
 deixando o projeto no github:
 
 git init                      #inicia o git para esse projecto
 git add .                     #adiciona os arquivos para o git
 git commit -m "mensagem sua"  #faz o commit
+
+------------------------------------------------------------------------
+comando para fazer a publicação no heroku
+
+heroku login                                            # faz o login na sua conta do heroku
+heroku apps:create nomeDoAPP --builpack heroku/python   # cria um app no heroku
+git push heroku master                                  # faz o push para o servidor
+
+------------------------------------------------------------------------
 
