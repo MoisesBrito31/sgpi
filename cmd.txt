@@ -24,4 +24,8 @@ heroku run python manage.py migrate                         # atualiza o banco
 heroku run python manage.py createsuperuser                 # adiciona o usuario 
 
 ------------------------------------------------------------------------
+trabalhando com github seu:
 
+git remote add origin https://github.com/MoisesBrito31/sgpi.git  # faz o push para um repositorio seu
+git branch -M master
+git push -u origin master
