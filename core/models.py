@@ -2,6 +2,14 @@ from django.db import models
 from random import randint as randon
 from stdimage import StdImageField
 
+CHAVE = (
+    'G','0','4','f','H','I','a','6','3','o','h','f','M','k','n','P','Q','R','S','T',
+    'e','W','z','Y','Z','a','c','c','d','e','f','g','s','P','j','k','l','z','n','o',
+    'p','q','V','s','t','u','3','x','5','z','0','1','2','3','4','5','6','7','8','9',
+    'y','e','r','s','3','4','w','n','0','z','0','h','T','3','4','i','1','j','x','B',
+    'p','q','r','s','t','u','w','x','y','z','0','1','2','3','4','5','6','7','8','9',
+)
+
 class Token():
     token = 'abcdefghij'
     __base =(
@@ -42,9 +50,9 @@ class Cargo(Base):
 
 class Usuario(Base):
     nome = models.CharField('nome', max_length=100)
-    email = models.EmailField('E-Mail', max_length=100)
+    email = models.EmailField('E-Mail', max_length=100, unique=True)
     nivel = models.ForeignKey('core.Cargo', verbose_name='Cargo', on_delete=models.CASCADE)
-    senha = models.CharField('Senha', max_length=10)
+    senha = models.CharField('Senha', max_length=10, )
     token = models.CharField('token', max_length=255, default='', blank=True)
     img = StdImageField(
                             'Imagem', upload_to='usuarios', 
@@ -67,36 +75,8 @@ class Usuario(Base):
         tk = Token().token
         self.token = tk
 
-
-class Vara(Base):
-    nome = models.CharField('nome', max_length= 100)
-    juiz = models.CharField('juiz', max_length=100)
-    cidade = models.CharField('cidade', max_length=100)
-    estado = models.CharField('estado', max_length=100)
-
-    class Meta:
-        verbose_name = 'Vara Judicial'
-        verbose_name_plural = 'Varas Judiciais'
-
-    def __str__(self):
-        return self.nome
+    
 
 
-class Processo(Base):
-    numero = models.CharField('numero',max_length=100)
-    vara = models.ForeignKey('core.vara', verbose_name='Vara', on_delete=models.CASCADE)
-    intimacao = models.DateField('intimação', blank=True)
-    inicio = models.DateField('inicio do trabalho', blank=True)
-    entrega = models.DateField('entrega', blank=True)
-    requerente = models.CharField('Requerente', max_length=100)
-    requerido = models.CharField('Requerido', max_length=100)
-    honorario_pro = models.DecimalField('Honorário Proposto', decimal_places=2, max_digits=10, blank=True)
-    honorario = models.DecimalField('Honorário', decimal_places=2, max_digits=10, blank=True)
-    obs = models.TextField('obs', max_length=1000, blank=True)
 
-    class Meta:
-        verbose_name= 'Processo'
-        verbose_name_plural = 'Processos'
 
-    def __str__(self):
-        return self.numero

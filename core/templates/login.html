@@ -6,12 +6,12 @@
     <h2>Login</h2>
 </div>
 <hr>
-<div class="m-auto p-4" style="max-width: 500px;">
+<div class="m-auto p-4 login">
     <form method="POST" action="{% url 'login' %}">
         {% csrf_token %}
         <div class="form-group">
             <label for="email">E-mail:</label>
-            <input type="email" class="form-control" id="email" name="email" autocomplete="true" onclick="clearMsg()">
+            <input type="email" class="form-control" id="email" name="email" autocomplete="False" onclick="clearMsg()">
         </div>
         <div class="form-group">
             <label for="email">Senha:</label>
