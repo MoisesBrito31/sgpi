@@ -5,7 +5,7 @@
     <head>
         <meta charset="utf-8">
         <title>{{ titulo }}</title>
-        <link rel="stylesheet" href="{% static '/css/bootstrap.css' %}" >
+        <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" >
     </head>
     <body>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
@@ -17,14 +17,17 @@
                 <div class="col mr-auto">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Home</a>
+                            <a class="nav-link" href="{% url 'index' %}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'usuario' %}">Usuários</a>
                         </li>
                     </ul>
                 </div>
                 {% if titulo != 'Login' %}
                 <div class="col text-right text-light">
                     <img class="img-thumbnail" src="{{ user.img.thumb.url }}" width="40" height="40" >
-                    olá {{ user.nome }} [<a href="{% url 'login' %}" onclick="logOff()">Sair</a>]
+                    olá {{ user.nome }} [ <a href="{% url 'logout' %}" >Sair</a> ]
                 </div>
                 {% endif %}
                
@@ -52,10 +55,11 @@
 
         <script>
 
-            function logOff(){
+            function sair(){
                 var c = document.cookie.split("; ");
                     for (i in c) 
-                        document.cookie =/^[^=]+/.exec(c[i])[0]+"=;expires=Thu, 01 Jan 1970 00:00:00 GMT"; 
+                        document.cookie =/^[^=]+/.exec(c[i])[0]+"=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                //document.location.href='/login'
             }
            
         </script>
