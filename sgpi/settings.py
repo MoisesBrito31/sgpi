@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'item',
+    'cliente',
     'stdimage',
     'bootstrap4',
 ]
