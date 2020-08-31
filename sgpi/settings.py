@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'core',
     'item',
     'cliente',
+    'conjunto',
     'stdimage',
     'bootstrap4',
 ]
