@@ -56,7 +56,7 @@ class Conjunto(Base):
 
 class Relacao(Base):
     componente = models.ForeignKey(Componente,blank=True, on_delete=models.CASCADE)
-    Item = models.ForeignKey(Conjunto, blank=True, on_delete=models.CASCADE)
+    conjunto = models.ForeignKey(Conjunto, blank=True, on_delete=models.CASCADE)
     quantidade = models.IntegerField('Quantidade')
     valor = models.DecimalField('Preço', decimal_places=2, max_digits=8, default=0.00)
 
@@ -65,7 +65,7 @@ class Relacao(Base):
         verbose_name_plural = 'Realações'        
 
     def __str__(self):
-        return f'{self.componente.nome} x {self.quantidade}'
+        return f'{self.componente.nome} (x{self.quantidade})'
 
 
 @receiver(pre_save, sender=Conjunto)

@@ -67,7 +67,7 @@ class Proposta(Base):
     tipo = models.ForeignKey(Tipo, on_delete=models.CASCADE)
     items = models.ManyToManyField(Item, through='ItemProduto')
     conjuntos = models.ManyToManyField(Conjunto ,through='ItemConjunto')
-    arquivos = models.ManyToManyField(Arquivo)
+    documentos = models.ManyToManyField(Arquivo, through='Arquivos')
 
     class Meta:
         verbose_name = 'Proposta'
@@ -100,4 +100,15 @@ class ItemConjunto(Base):
 
     def __str__(self):
         return f'{self.item.nome} x {self.quantidade}'
+
+class Arquivos(Base):
+    arquivo = models.ForeignKey(Arquivo,on_delete=models.CASCADE)
+    proposta = models.ForeignKey(Proposta, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Pasta'
+        verbose_name_plural = 'Pastas'
+
+    def __str__(self):
+        return f'{self.arquivo.nome} - {self.proposta.projeto}'
 

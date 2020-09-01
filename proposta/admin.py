@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ItemConjunto, ItemProduto, Proposta, Arquivo, Tipo, TipoArquivo, Vendedor
+from .models import ItemConjunto, ItemProduto, Proposta, Arquivo, Arquivos, Tipo, TipoArquivo, Vendedor
 
 @admin.register(Tipo)
 class TipoAdmin(admin.ModelAdmin):
@@ -14,6 +14,10 @@ class TipoArquivoAdmin(admin.ModelAdmin):
 @admin.register(Arquivo)
 class ArquivoAdmin(admin.ModelAdmin):
     list_display=('nome','tipo')
+
+@admin.register(Arquivos)
+class ArquivosAdmin(admin.ModelAdmin):
+    list_display=('arquivo','proposta')
 
 @admin.register(Vendedor)
 class VendedorAdmin(admin.ModelAdmin):

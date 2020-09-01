@@ -15,8 +15,18 @@ class ComponenteAdmin(admin.ModelAdmin):
 
 @admin.register(Relacao)
 class RelacaoAdmin(admin.ModelAdmin):
-    list_display=('componente','quantidade', 'valor')
+    list_display=('componente','quantidade', 'valor', 'get_item')
+
+    def get_item(self, obj):
+        return str(obj.conjunto)
+
+    get_item.short_description = 'Conjunto'
 
 @admin.register(Conjunto)
 class ConjuntoAdmin(admin.ModelAdmin):
-    list_display=('nome','tipo','valor')
+    list_display=('nome','tipo','valor','get_lista')
+
+    def get_lista(self , obj):
+        return ',---'.join(str(m.relacao_set.first()) for m in obj.lista.all())
+
+    get_lista.short_description = 'Componentes'
