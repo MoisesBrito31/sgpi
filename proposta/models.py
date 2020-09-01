@@ -29,8 +29,21 @@ class TipoArquivo(Base):
         return self.nome
 
 
+class Vendedor(Base):
+    nome = models.CharField('Vendedor', max_length=20)
+    email = models.EmailField('E-Mail', max_length=100)
+    telefone = models.CharField('Telefone', max_length=20)
+
+    class Meta:
+        verbose_name = 'Vendedor'
+        verbose_name_plural = 'Vendedores'
+
+    def __str__(self):
+        return self.nome
+
 
 class Arquivo(Base):
+    nome = models.CharField('Nome do Arquivo', max_length=100)
     arquivo = models.FileField('Arquivo', upload_to='propostas/files')
     tipo = models.ForeignKey(TipoArquivo,on_delete=models.CASCADE)
     descricao = models.CharField('descrição', max_length=50, default='', blank=True)
@@ -40,7 +53,7 @@ class Arquivo(Base):
         verbose_name_plural = 'Arquivos'
 
     def __str__(self):
-        return self.arquivo
+        return f'{self.nome} ({self.tipo})'
 
 
 class Proposta(Base):
@@ -49,14 +62,14 @@ class Proposta(Base):
     tecnico = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     cliente = models.ForeignKey(Cliente, blank=True,on_delete=models.CASCADE)
     responsavel = models.ForeignKey(Responsavel,blank=True, on_delete=models.CASCADE)
-    vendedor = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    vendedor = models.ForeignKey(Vendedor, on_delete=models.CASCADE)
     datafinal = models.DateField('Data final')
     tipo = models.ForeignKey(Tipo, on_delete=models.CASCADE)
-    items = models.ManyToManyField(Item, through='ItemProduto', on_delete=models.CASCADE)
-    conjuntos = models.ManyToManyField(Conjunto ,through='ItemConjunto', on_delete=models.CASCADE)
-    arquivos = models.ManyToManyField(Arquivo, on_delete=models.CASCADE)
+    items = models.ManyToManyField(Item, through='ItemProduto')
+    conjuntos = models.ManyToManyField(Conjunto ,through='ItemConjunto')
+    arquivos = models.ManyToManyField(Arquivo)
 
-     class Meta:
+    class Meta:
         verbose_name = 'Proposta'
         verbose_name_plural = 'Propostas'
 

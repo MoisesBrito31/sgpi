@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'item',
     'cliente',
     'conjunto',
+    'proposta',
     'stdimage',
     'bootstrap4',
 ]
