@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% block context %}
+
+<div class="text-center">
+    <div class="text-left">
+        <h2 class="h2 text-primary">Produtos de Distribuição</h2>
+    </div>
+    <div class="text-right">
+        <a class="btn btn-primary" href="#">Cadastrar Novo</a>
+    </div>
+</div>
+<hr>
+{% if msg == 'gravado' %}
+    <div class="alert alert-success p-3">
+        <strong>Cadastrado com Sucesso</strong>
+    </div>
+    {% endif %}
+<div class="text-center">
+    <table class="table table-striped">
+        <thead>
+            <tr class="thead-dark">
+                <th><input type="checkbox" ></th>
+                <th>Código</th>
+                <th>Nome</th>
+                <th>Marca</th>
+                <th>Tipo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in dados %}
+            <tr>
+                <td><input type="checkbox" ></td>
+                <td>{{item.codigo}}</td>
+                <td>{{item.nome}}</td>
+                <td>{{item.fabricante}}</td>
+                <td>{{item.tipo}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
