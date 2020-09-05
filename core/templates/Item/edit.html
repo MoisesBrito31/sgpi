@@ -2,11 +2,17 @@
 {% load bootstrap4 %}
 {% load static %}
 {% block context %}
-<div>
-    <h1>editor de Usuário</h1>
+<div class="text-center row">
+    <div class="text-left col">
+        <h2 class="h2 text-primary">Edição de Produtos</h2>
+    </div>
+    <div class="col-auto form-inline">
+        <a class="btn btn-primary mr-2" href="{% url 'item' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
+        <a class="btn btn-primary mr-2" href="{% url 'item_item' %}?id={{id}}">Detalhes</a>
+    </div>
 </div>
 <hr>
-<div class="border p-3 m-auto" style="max-width: 600px;">
+<div class="border p-3 m-auto" style="max-width: 800px;">
     {% if msg == 'gravado' %}
     <div class="alert alert-success p-3">
         <strong>Cadastrado com Sucesso</strong>
@@ -17,11 +23,13 @@
         <strong>Falha ao Gravar no Banco</strong>
     </div>
     {% endif %}
-    <form action="{% url 'usuario_edit' %}" method="POST" enctype="multipart/form-data" class="form">
+    <form action="{% url 'item_edit' %}" method="POST" enctype="multipart/form-data" class="form">
         {% csrf_token %}
         <input hidden id="id" name="id" value="{{ id }}">
         {% bootstrap_form dados %}
-        <button class="btn btn-primary" type="submit">Alterar</button>
+        <div class="text-center mt-5 pt-5 mb-2">
+            <button class="btn btn-block btn-primary  text-center" type="submit">Alterar</button>
+        </div>
     </form>
 </div>
 

@@ -3,18 +3,29 @@
 {% load bootstrap4 %}
 {% block context %}
 
-<div class="text-center">
-    <div class="text-left">
+<div class="text-center row">
+    <div class="text-left col">
         <h2 class="h2 text-primary">Produtos de Distribuição</h2>
     </div>
-    <div class="text-right">
-        <a class="btn btn-primary" href="#">Cadastrar Novo</a>
+    <div class="col-auto form-inline">
+        <form method="GET" action="{% url 'item' %}">
+            <input type="text" name="msg" id="msg" value="ok" hidden>
+            <input type="text" name="filtro" id="filtro" value="none" hidden>
+            <input type="text" name="find" id="find" class="form-control" style="max-width:300px;" value="{{find}}">
+            <button type="submit" class="btn btn-success mr-3"><img src="{% static 'img/procurar.png' %}" width="20" height="20"></button>
+        </form>
+        <a class="btn btn-primary" href="{% url 'item_add' %}"><img src="{% static 'img/adicionar.png' %}" width="20" height="20"></a>
     </div>
 </div>
 <hr>
 {% if msg == 'gravado' %}
     <div class="alert alert-success p-3">
-        <strong>Cadastrado com Sucesso</strong>
+        <strong>Ação executada com Sucesso</strong>
+    </div>
+    {% endif %}
+    {% if msg == 'falha' %}
+    <div class="alert alert-danger p-3">
+        <strong>Falha ao Tentar executar a Ação</strong>
     </div>
     {% endif %}
 <div class="text-center">
@@ -22,10 +33,30 @@
         <thead>
             <tr class="thead-dark">
                 <th><input type="checkbox" ></th>
-                <th>Código</th>
-                <th>Nome</th>
-                <th>Marca</th>
-                <th>Tipo</th>
+                <th>
+                    <a class="text-light" href="{% url 'item' %}?filtro=codigo">Código</a>
+                    {% if filtro == 'codigo' %}
+                    <img src="{% static 'img/ordenarInv.png' %}" width="20" height="20">
+                    {% endif %}
+                </th>
+                <th>
+                    <a class="text-light" href="{% url 'item' %}?filtro=nome">Nome</a>
+                    {% if filtro == 'nome' %}
+                    <img src="{% static 'img/ordenarInv.png' %}" width="20" height="20">
+                    {% endif %}
+                </th>
+                <th>
+                    <a class="text-light" href="{% url 'item' %}?filtro=fabricante">Marca</a>
+                    {% if filtro == 'fabricante' %}
+                    <img src="{% static 'img/ordenarInv.png' %}" width="20" height="20">
+                    {% endif %}
+                </th>
+                <th>
+                    <a class="text-light" href="{% url 'item' %}?filtro=tipo">Tipo</a>
+                    {% if filtro == 'tipo' %}
+                    <img src="{% static 'img/ordenarInv.png' %}" width="20" height="20">
+                    {% endif %}
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -33,7 +64,7 @@
             <tr>
                 <td><input type="checkbox" ></td>
                 <td>{{item.codigo}}</td>
-                <td>{{item.nome}}</td>
+                <td><a href="{% url 'item_item' %}?id={{item.pk}}">{{item.nome}}</a></td>
                 <td>{{item.fabricante}}</td>
                 <td>{{item.tipo}}</td>
             </tr>

@@ -26,7 +26,7 @@ def UserPermission(request, nivel_min=5):
         return False
 
 def logado(alvo, request, context={}, titulo='', msg='ok', dados='', nivel_min=5):
-    try:
+    #try:
         usu = str(request.COOKIES['userID'])
         user = Usuario.objects.get(token=usu)
         context['user'] = user
@@ -38,12 +38,12 @@ def logado(alvo, request, context={}, titulo='', msg='ok', dados='', nivel_min=5
             return render(request, 'erro.html', context)
         else:
             return render(request, alvo, context)
-    except:
-        redir = alvo.split('.')[0]
-        redir = redir.split('/')[0]
-        response = redirect('/login')
-        set_cookie(response,'redirect', redir)
-        return response
+    #except:
+    #    redir = alvo.split('.')[0]
+    #    redir = redir.split('/')[0]
+    #    response = redirect('/login')
+    #    set_cookie(response,'redirect', redir)
+    #    return response
 
 
 class IndexView(View):
