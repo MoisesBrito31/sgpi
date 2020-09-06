@@ -1,15 +1,27 @@
 from django.db import models
+from stdimage import StdImageField
 from core.models import Base
 from item.models import Item
 
 
 class Cargo(Base):
-    nome = models.CharField('Cargo', max_length=20)
+    nome = models.CharField('Cargo', max_length=35)
     descricao = models.CharField('descrição', max_length=50, default='', blank=True)
 
     class Meta:
         verbose_name = 'Cargo'
         verbose_name_plural = 'Cargos'
+
+    def __str__(self):
+        return self.nome
+
+class Industria(Base):
+    nome = models.CharField('Cargo', max_length=35)
+    descricao = models.CharField('descrição', max_length=50, default='', blank=True)
+
+    class Meta:
+        verbose_name = 'Indústria'
+        verbose_name_plural = 'Indústrias'
 
     def __str__(self):
         return self.nome
@@ -35,6 +47,9 @@ class Cliente(Base):
     endereco = models.CharField('Endereço', max_length=50, blank=True)
     cnpj = models.CharField('CNPJ', max_length=20, blank=True)
     responsaveis = models.ManyToManyField(Responsavel,through='Relacao')
+    industria = models.ForeignKey(Industria, blank=True, default=1 ,on_delete=models.CASCADE)
+    logo = StdImageField('Imagem', upload_to='cliente/logo', variations={'thumb' :{'height': 150, 'width': 150, 'crop': True}}, blank = True)
+    
 
     class Meta:
         verbose_name = 'Cliente'

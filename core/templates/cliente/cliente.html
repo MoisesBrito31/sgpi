@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% load static %}
+{% block context %}
+<div class="text-center row">
+    <div class="text-left col">
+        <h2 class="h2 text-primary">{{dados.nome}}</h2>
+    </div>
+    <div class="col-auto form-inline">
+        <a class="btn btn-primary mr-2" href="{% url 'cliente' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
+        <a class="btn btn-danger mr-2" onclick="del()"><img src="{% static 'img/lixo.png' %}" width="20" height="20"></a>
+        <a class="btn btn-primary mr-2" href="{% url 'cliente_edit' %}?id={{dados.id}}"><img src="{% static 'img/editar.png' %}" width="20" height="20"></a>
+    </div>
+</div>
+<hr>
+
+<div class="p-3 m-auto">
+        <div class="row mb=3 pb-3">
+            <div class="col-auto">
+                <img class="img-thumbnail" src="{{dados.logo.thumb.url}}">
+            </div>
+            <div class="col">
+                <strong class="text-primary">Indústria:</strong> <br>
+                <a>{{dados.industria}}</a>
+            </div>
+            <div class="col">
+                <strong class="text-primary">Endereço:</strong> <br>
+                {{dados.endereco}}
+            </div>
+            <div class="col">
+                <strong class="text-primary">CNPJ:</strong> <br>
+                {{dados.cnpj}}
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col">
+                <div class="m-auto">
+                <div class="modal-title text-center">
+                    <h3 class="h3 text-center text-primary">Funcionários</h3>
+                </div>
+                <table class="table table-striped">
+                    <thead class="table-dark text-center">
+                        <tr>
+                            <th>Nome</th>
+                            <th>Cargo</th>
+                            <th>E-mail</th>
+                            <th>Phone</th>
+                            <th>-</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center">
+                        {% for f in funcionarios %}
+                        <tr>
+                            <td>{{f.funcionario.nome}}</td>
+                            <td>{{f.funcionario.cargo}}</td>
+                            <td>{{f.funcionario.email}}</td>
+                            <td>{{f.funcionario.telefone}}</td>
+                            <td><a class="btn btn-danger"><img src="{% static 'img/lixo.png' %}" width="20" height="20"></a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            </div>
+            <div class="col">
+            <div class="m-auto">
+                <div class="modal-title text-center">
+                    <h3 class="h3 text-center text-primary">Projetos</h3>
+                </div>
+                <table class="table table-striped">
+                    <thead class="table-dark text-center">
+                        <tr>
+                            <th>Projeto</th>
+                            <th>Classe</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center">
+                        {% for p in propostas %}
+                        <tr>
+                            <td>{{p.projeto}}</td>
+                            <td>{{p.tipo}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            </div>
+        </div>
+</div>
+
+<script>
+    function del(){
+        var ret = confirm('Deseja apagar o Cliente {{dados.nome}}? \r\n todos os dados relacionados serão deletados!!')  
+        if(ret){
+            document.location.href="{% url 'cliente_del' %}?id={{dados.id}}"
+        }      
+    }
+</script>
+
+{% endblock %}

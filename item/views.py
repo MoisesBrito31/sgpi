@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from django.db.models import Q
 from django.views.generic import View
 from core.views import logado
+from proposta.models import ItemProduto
 from .models import Item,Tipo
 from .forms import ItemForm
 
@@ -67,7 +68,8 @@ class ItemView(View):
         try:
             index = request.GET['id']
             form = Item.objects.get(id=index)
-            return logado('item/item.html',request,dados=form,nivel_min=2)
+            form2 = ItemProduto.objects.all().filter(item=index)
+            return logado('item/item.html',request,context={'projetos': form2},dados=form,nivel_min=2)
         except:
             return redirect('item') 
 

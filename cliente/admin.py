@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Cargo, Responsavel, Cliente, Relacao
+from .models import Cargo, Responsavel, Cliente, Relacao, Industria
 
 
 @admin.register(Cargo)
@@ -17,7 +17,7 @@ class ResponsavelAdmin(admin.ModelAdmin):
 
 @admin.register(Cliente)
 class ClienteAdmin(admin.ModelAdmin):
-    list_display=('nome','endereco','cnpj','get_responsaveis')
+    list_display=('nome','industria','endereco','cnpj','get_responsaveis')
 
     def get_responsaveis(self, obj):
         return ', '.join([m.nome for m in obj.responsaveis.all()])
@@ -27,4 +27,8 @@ class ClienteAdmin(admin.ModelAdmin):
 @admin.register(Relacao)
 class RelacaoAdmin(admin.ModelAdmin):
     list_display=('funcionario','empresa')
+
+@admin.register(Industria)
+class Industria(admin.ModelAdmin):
+    list_display=('nome',)
 

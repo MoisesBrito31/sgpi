@@ -67,18 +67,22 @@
             <thead class="table-dark text-center">
                 <tr>
                     <th><input type="checkbox"></th>
+                    <th>Cliente</th>
                     <th>Projeto</th>
                     <th>Tipo</th>
                     <th>Quantidade</th>
                 </tr>
             </thead>
             <tbody class="text-center">
+                {% for p in projetos %}
                 <tr>
                     <td><input type="checkbox"></td>
-                    <td>dsadsa</td>
-                    <td>dsadsa</td>
-                    <td>12</td>
+                    <td><a href="{% url 'cliente_cliente' %}?id={{p.proposta.cliente.id}}">{{p.proposta.cliente}}</a></td>
+                    <td>{{p.proposta}}</td>
+                    <td>{{p.proposta.tipo}}</td>
+                    <td>{{p.quantidade}}</td>
                 </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
