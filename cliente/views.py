@@ -1,10 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, HttpResponse
 from django.db.models import Q
 from django.views.generic import View
-from core.views import logado
+from core.views import logado, UserPermission
 from proposta.models import Proposta
 from .models import Cliente, Responsavel, Relacao
-from .forms import ClienteForm
+from .forms import ClienteForm, ResponsavelForm
 
 
 class IndexView(View):
@@ -77,3 +77,59 @@ class ClienteView(View):
             return logado('cliente/cliente.html',request,context={'funcionarios':form2,'propostas':form3},dados=form,nivel_min=2)
         except:
             return redirect('cliente') 
+
+class ResponsavelAdd(View):    
+    def get(self, request):
+        try:
+            index = request.GET['id']
+            return logado('cliente/responsavel/add.html',request,context={'clienteID':index},dados=ResponsavelForm(),nivel_min=2)
+        except:
+            return logado('cliente/responsavel/add.html',request,dados=ResponsavelForm(),nivel_min=2)
+    def post(self,request):
+        form = ResponsavelForm(request.POST, request.FILES)
+        if form.is_valid:
+            try:
+                index = request.POST['cliente_id']
+                client = Cliente.objects.get(id=index)
+                form.save()
+                func = Responsavel.objects.all().last() 
+                R = Relacao(funcionario=func,empresa=client)
+                R.save()
+                return logado('cliente/responsavel/add.html',request,context={'clienteID':index},dados=ResponsavelForm(),nivel_min=2,msg='gravado')
+            except:
+                pass
+        return logado('cliente/responsavel/add.html',request,dados=ResponsavelForm(),nivel_min=2,msg='falha')
+
+
+class ResponsavelEdit(View):
+    def get(self, request):
+        try:
+            index = request.GET['id']
+            c_index = request.GET['cliente_id']
+            form = ResponsavelForm(instance=Responsavel.objects.get(id=index))
+            return logado('cliente/responsavel/edit.html',request,context={'id':index,'clienteID':c_index},dados=form,nivel_min=2)
+        except:
+            return redirect('cliente') 
+    def post(self, request):
+        index = request.POST['id']
+        c_index = request.POST['cliente_id']
+        form = ResponsavelForm(request.POST, request.FILES, instance=Responsavel.objects.get(id=index))
+        if form.is_valid:
+            form.save()
+            return logado('cliente/responsavel/edit.html',request,context={'id':index,'clienteID':c_index},dados=form,nivel_min=2,msg='gravado')
+        else:
+            return logado('cliente/responsavel/edit.html',request,context={'id':index,'clienteID':c_index},dados=form,nivel_min=2,msg='falha')
+
+
+class ResponsavelDelete(View):
+    def get(self, request):
+        try:
+            if UserPermission(request,nivel_min=2):
+                index = request.GET['id']
+                i = Responsavel.objects.get(id=index)
+                i.delete()
+                return HttpResponse("ok")
+            else:
+                return HttpResponse("falha você não tem permissão")
+        except:
+            return HttpResponse("falha")

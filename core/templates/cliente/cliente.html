@@ -35,8 +35,13 @@
         <div class="row mt-5">
             <div class="col">
                 <div class="m-auto">
-                <div class="modal-title text-center">
-                    <h3 class="h3 text-center text-primary">Funcionários</h3>
+                <div class="modal-title row">
+                    <div class="col text-center">
+                        <h3 class="h3 text-primary">Funcionários</h3>
+                    </div>
+                    <div class="col-auto text-right mr-3">
+                        <a href="{% url 'responsavel_add' %}?id={{dados.id}}" class="btn btn-primary"><img src="{% static 'img/adicionar.png' %}" height="20"></a>
+                    </div>
                 </div>
                 <table class="table table-striped">
                     <thead class="table-dark text-center">
@@ -51,11 +56,11 @@
                     <tbody class="text-center">
                         {% for f in funcionarios %}
                         <tr>
-                            <td>{{f.funcionario.nome}}</td>
+                            <td><a href="{% url 'responsavel_edit' %}?id={{f.funcionario.id}}&cliente_id={{dados.id}}">{{f.funcionario.nome}}</a></td>
                             <td>{{f.funcionario.cargo}}</td>
                             <td>{{f.funcionario.email}}</td>
                             <td>{{f.funcionario.telefone}}</td>
-                            <td><a class="btn btn-danger"><img src="{% static 'img/lixo.png' %}" width="20" height="20"></a></td>
+                            <td><a onclick="delResp({{f.funcionario.id}})" class="btn btn-danger"><img src="{% static 'img/lixo.png' %}" width="20" height="20"></a></td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -94,6 +99,30 @@
         if(ret){
             document.location.href="{% url 'cliente_del' %}?id={{dados.id}}"
         }      
+    }
+    function delResp(val){
+        var ret = confirm('Deseja apagar o Funcionario {{ funcionarios.funcionario.nome }}? \r\n todos os dados relacionados serão deletados!!')  
+        if(ret){
+            executDel(`{% url 'responsavel_del' %}?id=${val}`)
+        }      
+    }
+    function executDel(url) {
+        var xhp = new XMLHttpRequest()
+
+        xhp.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                var re = this.responseText
+                //alert(re)
+                if (re='ok'){
+                    document.location.reload()
+                }
+                else{
+                    alert('Ocorreu uma Falha ao Processar o pedido')
+                }
+            }
+        }
+        xhp.open("Get", url)
+        xhp.send();
     }
 </script>
 
