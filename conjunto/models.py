@@ -46,6 +46,7 @@ class Conjunto(Base):
     tipo = models.ForeignKey(TipoConjunto, on_delete=models.CASCADE)
     valor = models.DecimalField('Preço', max_digits=8, decimal_places=2, default=0.00)
     lista = models.ManyToManyField(Componente, through='Relacao')
+    descricao = models.TextField('Descrição', max_length=200, default="",blank=True)
 
     class Meta:
         verbose_name = 'Conjunto'

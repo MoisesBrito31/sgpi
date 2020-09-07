@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% load static %}
+{% block context %}
+<div class="text-center row">
+    <div class="text-left col">
+        <h2 class="h2 text-primary">{{dados.nome}}</h2>
+    </div>
+    <div class="col-auto form-inline">
+        <a class="btn btn-primary mr-2" href="{% url 'conjunto' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
+        <a class="btn btn-danger mr-2" onclick="del()"><img src="{% static 'img/lixo.png' %}" width="20" height="20"></a>
+        <a class="btn btn-primary mr-2" href="{% url 'conjunto_edit' %}?id={{dados.id}}"><img src="{% static 'img/editar.png' %}" width="20" height="20"></a>
+    </div>
+</div>
+<hr>
+
+<div class="p-3 m-auto">
+        <div class="row mb=3 pb-3">
+            <div class="col">
+                <strong class="text-primary">Descrição:</strong> <br>
+                <a>{{dados.descricao}}</a>
+            </div>
+            <div class="col-auto m-2">
+                <strong class="text-primary">Tipo:</strong> <br>
+                <p class="text-right">{{dados.tipo}}</p>
+            </div>
+            <div class="col-auto m-2">
+                <strong class="text-primary">Preço Venda:</strong> <br>
+                R$ &nbsp;{{dados.valor}}
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col">
+                <div class="m-auto">
+                <div class="modal-title row">
+                    <div class="col text-center">
+                        <h3 class="h3 text-primary">Itens do Conjunto</h3>
+                    </div>
+                    <div class="col-auto text-right mr-3">
+                        <a class="btn btn-primary mr-2" href="{% url 'componente' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
+                        <a href="{% url 'relacao_add' %}?conjunto_id={{dados.id}}" class="btn btn-primary"><img src="{% static 'img/adicionar.png' %}" height="20"></a>
+                    </div>
+                </div>
+                <table class="table table-striped">
+                    <thead class="table-dark text-center">
+                        <tr>
+                            <th>Nome</th>
+                            <th>Tipo</th>
+                            <th>Preço Und.</th>
+                            <th>Quantidade</th>
+                            <th>Preço Final</th>
+                            <th>-</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center">
+                        {% for i in componentes %}
+                        <tr>
+                            <td><a href="{% url 'componente_edit' %}?id={{i.componente.id}}">{{i.componente.nome}}</a></td>
+                            <td>{{i.componente.tipo}}</td>
+                            <td>R$ &nbsp;{{i.componente.preco_venda}}</td>
+                            <td>
+                                <form id="q{{i.id}}" action="{% url 'relacao_alt' %}" method="POST">
+                                    {% csrf_token %}
+                                    <input name="conjunto_id" type="hidden" value="{{dados.id}}">
+                                    <input name="relacao_id" type="hidden" value="{{i.id}}">
+                                <div class="m-auto text-center">
+                                    <input name="valor"  onchange="submit({{i.id}})" class="text-center" style="max-width: 100px;" type="number" min="0" value={{i.quantidade}}> 
+                                </div>
+                                </form>
+                            </td>
+                            <td>R$ &nbsp;{{i.valor}}</td>
+                            <td>
+                                <form id="d{{i.id}}" action="{% url 'relacao_del' %}" method="POST">
+                                    {% csrf_token %}
+                                    <input name="conjunto_id" type="hidden" value="{{dados.id}}">
+                                    <input name="relacao_id" type="hidden" value="{{i.id}}">
+                                    <a onclick="delRelacao({{i.id}},'{{i.componente.nome}}')" class="btn table-light"><img src="{% static 'img/lixo.png' %}" width="20" height="20"></a>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            </div>
+        </div>
+</div>
+
+<script>
+    function submit(val){
+        document.getElementById(`q${val}`).submit()
+    }
+    function delRelacao(val, nome){
+        var ret = confirm(`Deseja remover o Componente ${nome} do Conjuto?`)  
+        if(ret){
+            document.getElementById(`d${val}`).submit()
+        }
+    }
+    function del(){
+        var ret = confirm('Deseja apagar o Conjunto {{dados.nome}}? \r\n todos os dados relacionados serão deletados!!')  
+        if(ret){
+            document.location.href="{% url 'conjunto_del' %}?id={{dados.id}}"
+        }      
+    }
+    function delResp(val){
+        var ret = confirm('Deseja apagar o Funcionario {{ funcionarios.funcionario.nome }}? \r\n todos os dados relacionados serão deletados!!')  
+        if(ret){
+            executDel(`{% url 'responsavel_del' %}?id=${val}`)
+        }      
+    }
+    function qtdAlt(id_rel){
+        var val = document.getElementById(id_rel).value
+        url = `{% url 'relacao_alt' %}?relacao_id=${id_rel}&valor=${val}`
+        var xhp = new XMLHttpRequest()
+        xhp.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                var re = this.responseText
+                if (re='ok'){
+                    document.location.reload()
+                }
+                else{
+                    alert('Ocorreu uma Falha ao Processar o pedido')
+                }
+            }
+        }
+        xhp.open("Get", url)
+        xhp.send();
+    }
+    function executDel(url) {
+        var xhp = new XMLHttpRequest()
+        xhp.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                var re = this.responseText
+                //alert(re)
+                if (re='ok'){
+                    document.location.reload()
+                }
+                else{
+                    alert('Ocorreu uma Falha ao Processar o pedido')
+                }
+            }
+        }
+        xhp.open("Get", url)
+        xhp.send();
+    }
+</script>
+
+{% endblock %}

@@ -26,7 +26,7 @@ def UserPermission(request, nivel_min=5):
         return False
 
 def logado(alvo, request, context={}, titulo='', msg='ok', dados='', nivel_min=5):
-    #try:
+    try:
         usu = str(request.COOKIES['userID'])
         user = Usuario.objects.get(token=usu)
         context['user'] = user
@@ -34,16 +34,18 @@ def logado(alvo, request, context={}, titulo='', msg='ok', dados='', nivel_min=5
         context['msg'] = msg
         context['dados'] = dados
         if user.nivel.nivel> nivel_min:
-            context['msg'] = 'Você não tem Autorização para acessar essa pagina'
-            return render(request, 'erro.html', context)
+            context['titulo']='erro'
+            context['msg']='Você não tem Autorização para acessar essa pagina. Faça login com um Usuário com mais Privilégios'
+            return render(request,'erro.html',context)
         else:
             return render(request, alvo, context)
-    #except:
-    #    redir = alvo.split('.')[0]
-    #    redir = redir.split('/')[0]
-    #    response = redirect('/login')
-    #    set_cookie(response,'redirect', redir)
-    #    return response
+    except:
+        redir = alvo.split('.')[0]
+        redir = redir.split('/')[0]
+        #msg='Falha na estrutura de Requisição vc esta perdido?'
+        response = redirect('/login')
+        set_cookie(response,'redirect', redir)
+        return response
 
 
 class IndexView(View):
@@ -144,7 +146,7 @@ class LoginView(View):
             use = Usuario.objects.get(email=us, senha=sh)
             use.loggin()
             use.save()
-            response = redirect(alvo)
+            response = redirect('/'+alvo)
             set_cookie(response, 'userID',use.token)
             return response
         except:
@@ -166,4 +168,10 @@ class Logout(View):
         return render(request, 'login.html', self.context)
 
     
-
+class ErroView(View):
+    def get(self, request):
+        try:
+            mensagem = request.GET['msg']
+        except:
+            mensagem = "Falha desconhecida"
+        return render(request,'erro.html',context={'msg':mensagem})

@@ -20,18 +20,25 @@
                             <a class="nav-link" href="{% url 'index' %}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'item' %}">Itens</a>
+                            <a class="nav-link" href="{% url 'cliente' %}">Clientes</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'cliente' %}">Clientes</a>
+                            <a class="nav-link" href="{% url 'item' %}">Produtos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'conjunto' %}">Conjuntos</a>
                         </li>
                     </ul>
                 </div>
                 {% if titulo != 'Login' %}
-                <div class="col text-right text-light">
-                    <img class="img-thumbnail" src="{{ user.img.thumb.url }}" width="40" height="40" >
-                    olá {{ user.nome }} [ <a href="{% url 'logout' %}" >Sair</a> ]
-                </div>
+                    {% if titulo != 'erro' %}
+                        <div class="col text-right text-light">
+                            <img class="img-thumbnail" src="{{ user.img.thumb.url }}" width="40" height="40" >
+                            olá {{ user.nome }}&nbsp; <strong>[&nbsp; <a href="{% url 'logout' %}" >Sair</a>&nbsp; ] </strong>
+                        </div>
+                    {% else %}
+                        <strong class="text-light">[&nbsp; <a href="{% url 'logout' %}" >Sair</a>&nbsp; ] </strong>
+                    {% endif %}
                 {% endif %}
                
             </div>
