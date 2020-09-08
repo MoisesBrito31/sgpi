@@ -42,7 +42,7 @@ class ItemEdit(View):
             form = ItemForm(instance=Item.objects.get(id=index))
             return logado('item/edit.html',request,context={'id':index},dados=form,nivel_min=2)
         except:
-            return redirect('item') 
+            return redirect('/item') 
     def post(self, request):
         form = ItemForm(request.POST, request.FILES, instance=Item.objects.get(id=request.POST['id']))
         if form.is_valid:
@@ -71,6 +71,6 @@ class ItemView(View):
             form2 = ItemProduto.objects.all().filter(item=index)
             return logado('item/item.html',request,context={'projetos': form2},dados=form,nivel_min=2)
         except:
-            return redirect('item') 
+            return redirect('/item') 
 
         
