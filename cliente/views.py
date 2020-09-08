@@ -11,7 +11,7 @@ class IndexView(View):
     def get(self, request):
         mesagem = 'ok'
         filtro='none'
-        find = '*'
+        find = ''
         infor = Cliente.objects.all()
         try:
             filtro = request.GET['filtro']

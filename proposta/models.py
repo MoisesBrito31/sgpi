@@ -69,6 +69,7 @@ class Proposta(Base):
     conjuntos = models.ManyToManyField(Conjunto ,through='ItemConjunto')
     documentos = models.ManyToManyField(Arquivo, through='Arquivos')
 
+   
     class Meta:
         verbose_name = 'Proposta'
         verbose_name_plural = 'Propostas'

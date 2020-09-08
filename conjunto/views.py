@@ -11,7 +11,7 @@ class IndexView(View):
     def get(self, request):
         mesagem = 'ok'
         filtro='none'
-        find = '*'
+        find = ''
         infor = Conjunto.objects.all()
         try:
             filtro = request.GET['filtro']
@@ -73,12 +73,11 @@ class ConjuntoEdit(View):
             return logado('conjunto/edit.html',request,context={'id':index},dados=form,nivel_min=2,msg='falha')
 
 
-
 class ComponenteIndexView(View):
     def get(self, request):
         mesagem = 'ok'
         filtro='none'
-        find = '*'
+        find = ''
         infor = Componente.objects.all()
         try:
             filtro = request.GET['filtro']
@@ -170,7 +169,7 @@ class RelacaoAdd(View):
     def get(self, request):
         mesagem = 'ok'
         filtro='none'
-        find = '*'
+        find = ''
         infor = Componente.objects.all()
         conj_id = request.GET['conjunto_id']
         try:
