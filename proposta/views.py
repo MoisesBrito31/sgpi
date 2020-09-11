@@ -4,7 +4,7 @@ from django.views.generic import View
 from core.views import logado
 from core.models import Usuario
 from cliente.models import Relacao as Cli_relacao
-from .models import Proposta, Tipo, Cliente, Responsavel, Vendedor
+from .models import Proposta, Tipo, Cliente, Responsavel, Vendedor, ItemConjunto, ItemProduto, Arquivos
 from .forms import PropostaForm
 
 
@@ -61,3 +61,20 @@ class PropostaAdd(View):
             #    return logado('proposta/add.html',request,dados=PropostaForm(),nivel_min=2,msg='falha')
         #except:
             #return logado('proposta/add.html',request,dados=PropostaForm(),nivel_min=2,msg='falha')
+
+class PropostaView(View):
+    def get(self, request):
+        #try:
+            index = request.GET['id']
+            form = Proposta.objects.get(id=index)
+            form2 = ItemProduto.objects.all().filter(proposta=index)
+            form3 = ItemConjunto.objects.all().filter(proposta=index)
+            form4 = Arquivos.objects.all().filter(proposta=index)
+            cont = {
+                'itens':form2,
+                'conjuntos':form3,
+                'arquivos': form4,
+            }
+            return logado('proposta/proposta.html',request,context=cont,dados=form,nivel_min=2)
+        #except:
+        #    return redirect('/proposta') 

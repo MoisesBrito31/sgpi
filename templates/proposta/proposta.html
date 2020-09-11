@@ -4,10 +4,10 @@
 {% block context %}
 <div class="text-center row">
     <div class="text-left col">
-        <h2 class="h2 text-primary">{{dados.nome}}</h2>
+        <h2 class="h2 text-primary">{{dados.projeto}}</h2>
     </div>
     <div class="col-auto form-inline">
-        <a class="btn btn-primary mr-2" href="{% url 'conjunto' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
+        <a class="btn btn-primary mr-2" href="{% url 'proposta' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
         <a class="btn btn-danger mr-2" onclick="del()"><img src="{% static 'img/lixo.png' %}" width="20" height="20"></a>
         <a class="btn btn-primary mr-2" href="{% url 'conjunto_edit' %}?id={{dados.id}}"><img src="{% static 'img/editar.png' %}" width="20" height="20"></a>
     </div>
@@ -17,24 +17,97 @@
 <div class="p-3 m-auto">
         <div class="row mb=3 pb-3">
             <div class="col">
-                <strong class="text-primary">Descrição:</strong> <br>
-                <a>{{dados.descricao}}</a>
+                <strong class="text-primary">Cliente:</strong> <br>
+                <a>{{dados.cliente}}</a>
             </div>
             <div class="col-auto m-2">
-                <strong class="text-primary">Tipo:</strong> <br>
-                <p class="text-right">{{dados.tipo}}</p>
+                <strong class="text-primary">Responsável:</strong> <br>
+                <a>{{dados.responsavel}}</a>
             </div>
             <div class="col-auto m-2">
-                <strong class="text-primary">Preço Venda:</strong> <br>
-                R$ &nbsp;{{dados.valor}}
+                <strong class="text-primary">Técnico:</strong> <br>
+                {{dados.tecnico}}
+            </div>
+            <div class="col-auto m-2">
+                <strong class="text-primary">Vendedor:</strong> <br>
+                {{dados.vendedor}}
+            </div>
+            <div class="col-auto m-2">
+                <strong class="text-primary">Criação:</strong> <br>
+                {{dados.datafinal}}
             </div>
         </div>
+        <div class="row">
+            <div class="col">
+                <strong class="text-primary">Descrição:</strong> <br>
+                {{dados.descricao}}
+            </div>
+            <div class="col-auto">
+                <strong class="text-primary">Tipo:</strong> <br>
+                {{dados.tipo}}
+            </div>
+        </div>
+        <!--tabela de itens-->
         <div class="row mt-5">
             <div class="col">
                 <div class="m-auto">
                 <div class="modal-title row">
                     <div class="col text-center">
-                        <h3 class="h3 text-primary">Itens do Conjunto</h3>
+                        <h3 class="h3 text-primary">Itens</h3>
+                    </div>
+                    <div class="col-auto text-right mr-3">
+                        <a class="btn btn-primary mr-2" href="{% url 'componente' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
+                        <a href="{% url 'relacao_add' %}?conjunto_id={{dados.id}}" class="btn btn-primary"><img src="{% static 'img/adicionar.png' %}" height="20"></a>
+                    </div>
+                </div>
+                <table class="table table-striped">
+                    <thead class="table-dark text-center">
+                        <tr>
+                            <th>Código</th>
+                            <th>Modelo</th>
+                            <th>Preço Und.</th>
+                            <th>Quantidade</th>
+                            <th>-</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center">
+                        {% for i in itens %}
+                        <tr>
+                            <td>{{i.item.codigo}}</td>
+                            <td><a href="{% url 'componente_edit' %}?id={{i.componente.id}}">{{i.item.nome}}</a></td>
+                            <td>R$ &nbsp;{{i.item.preco}}</td>
+                            <td>
+                                <form id="q{{i.id}}" action="{% url 'relacao_alt' %}" method="POST">
+                                    {% csrf_token %}
+                                    <input name="proposta_id" type="hidden" value="{{dados.id}}">
+                                    <input name="itens_id" type="hidden" value="{{i.id}}">
+                                <div class="m-auto text-center">
+                                    <input name="valor"  onchange="submit({{i.id}})" class="text-center" style="max-width: 100px;" type="number" min="0" value={{i.quantidade}}> 
+                                </div>
+                                </form>
+                            </td>
+                            <td>
+                                <form id="d{{i.id}}" action="{% url 'relacao_del' %}" method="POST">
+                                    {% csrf_token %}
+                                    <input name="conjunto_id" type="hidden" value="{{dados.id}}">
+                                    <input name="relacao_id" type="hidden" value="{{i.id}}">
+                                    <a onclick="delRelacao({{i.id}},'{{i.componente.nome}}')" class="btn table-light"><img src="{% static 'img/lixo.png' %}" width="20" height="20"></a>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            </div>
+        </div>
+        <!--Tabela de itens de conjuntos-->
+        <div class="row mt-5">
+            <div class="col">
+                <div class="m-auto">
+                <div class="modal-title row">
+                    <div class="col text-center">
+                        <h3 class="h3 text-primary">Conjuntos</h3>
                     </div>
                     <div class="col-auto text-right mr-3">
                         <a class="btn btn-primary mr-2" href="{% url 'componente' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
@@ -48,27 +121,25 @@
                             <th>Tipo</th>
                             <th>Preço Und.</th>
                             <th>Quantidade</th>
-                            <th>Preço Final</th>
                             <th>-</th>
                         </tr>
                     </thead>
                     <tbody class="text-center">
-                        {% for i in componentes %}
+                        {% for i in conjuntos %}
                         <tr>
-                            <td><a href="{% url 'componente_edit' %}?id={{i.componente.id}}">{{i.componente.nome}}</a></td>
-                            <td>{{i.componente.tipo}}</td>
-                            <td>R$ &nbsp;{{i.componente.preco_venda}}</td>
+                            <td><a href="{% url 'componente_edit' %}?id={{i.componente.id}}">{{i.item.nome}}</a></td>
+                            <td>{{i.item.tipo}}</td>
+                            <td>R$ &nbsp;{{i.item.valor}}</td>
                             <td>
                                 <form id="q{{i.id}}" action="{% url 'relacao_alt' %}" method="POST">
                                     {% csrf_token %}
-                                    <input name="conjunto_id" type="hidden" value="{{dados.id}}">
-                                    <input name="relacao_id" type="hidden" value="{{i.id}}">
+                                    <input name="proposta_id" type="hidden" value="{{dados.id}}">
+                                    <input name="conjuntos_id" type="hidden" value="{{i.id}}">
                                 <div class="m-auto text-center">
                                     <input name="valor"  onchange="submit({{i.id}})" class="text-center" style="max-width: 100px;" type="number" min="0" value={{i.quantidade}}> 
                                 </div>
                                 </form>
                             </td>
-                            <td>R$ &nbsp;{{i.valor}}</td>
                             <td>
                                 <form id="d{{i.id}}" action="{% url 'relacao_del' %}" method="POST">
                                     {% csrf_token %}
@@ -81,6 +152,35 @@
                         {% endfor %}
                     </tbody>
                 </table>
+            </div>
+            </div>
+        </div>
+        <!--Lista de arquivos relacionados-->
+        <div class="row mt-5">
+            <div class="col">
+                <div class="m-auto">
+                <div class="modal-title row">
+                    <div class="col text-center">
+                        <h3 class="h3 text-primary">Arquivos</h3>
+                    </div>
+                    <div class="col-auto text-right mr-3">
+                        <a class="btn btn-primary mr-2" href="{% url 'componente' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
+                        <a href="{% url 'relacao_add' %}?conjunto_id={{dados.id}}" class="btn btn-primary"><img src="{% static 'img/adicionar.png' %}" height="20"></a>
+                    </div>
+                </div>
+                <div class="row bg-light border border-dark">
+                    {% for i in arquivos %}
+                    <div class="col mt-3 p-1 " style="max-width: 200px;">
+                        <div class="text-center">
+                            <h3 class="h6 text-primary">{{i.arquivo.tipo}}</h3>
+                        </div>
+                        <div class="p-2 m-2 text-center">
+                            <a target="_blank" href="{{i.arquivo.arquivo.url}}"><img src="{% static 'img/arquivo.png' %}" height="80"></a>
+                            <h3 class="h6 text-center mt-2">{{i.arquivo.nome}}</h3>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
             </div>
         </div>

@@ -29,9 +29,9 @@ class Industria(Base):
 
 class Responsavel(Base):
     nome = models.CharField('Nome',max_length=50)
-    email = models.EmailField('E-Mail', max_length=60)
-    telefone = models.IntegerField('Telefone')
-    cargo = models.ForeignKey(Cargo, blank=True, on_delete=models.CASCADE)
+    email = models.EmailField('E-Mail', max_length=60,blank=True, default='')
+    telefone = models.CharField('Telefone',max_length=30, blank=True, default='-')
+    cargo = models.ForeignKey(Cargo,on_delete=models.CASCADE)
    
 
     class Meta:
