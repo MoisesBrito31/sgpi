@@ -7,9 +7,9 @@
         <h2 class="h2 text-primary">{{dados.nome}} - ({{dados.codigo}})</h2>
     </div>
     <div class="col-auto form-inline">
-        <a class="btn btn-primary mr-2" href="{% url 'item' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
-        <a class="btn btn-danger mr-2" onclick="del()"><img src="{% static 'img/lixo.png' %}" width="20" height="20"></a>
-        <a class="btn btn-primary mr-2" href="{% url 'item_edit' %}?id={{dados.id}}"><img src="{% static 'img/editar.png' %}" width="20" height="20"></a>
+        <a class="btn btn-light mr-2" href="{% url 'item' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
+        <a class="btn btn-light mr-2" onclick="del()"><img src="{% static 'img/lixo.png' %}" width="20" height="20"></a>
+        <a class="btn btn-light mr-2" href="{% url 'item_edit' %}?id={{dados.id}}"><img src="{% static 'img/editar.png' %}" width="20" height="20"></a>
     </div>
 </div>
 <hr>
@@ -78,7 +78,7 @@
                 <tr>
                     <td><input type="checkbox"></td>
                     <td><a href="{% url 'cliente_cliente' %}?id={{p.proposta.cliente.id}}">{{p.proposta.cliente}}</a></td>
-                    <td>{{p.proposta}}</td>
+                    <td><a href="{% url 'proposta_proposta' %}?id={{p.proposta.id}}">{{p.proposta}}</td></a>
                     <td>{{p.proposta.tipo}}</td>
                     <td>{{p.quantidade}}</td>
                 </tr>

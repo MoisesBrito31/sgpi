@@ -3,18 +3,19 @@
 {% load bootstrap4 %}
 {% block context %}
 
+
 <div class="text-center row">
     <div class="text-left col">
-        <h2 class="h2 text-primary">Componentes</h2>
+        <h2 class="h2 text-primary">Adição de Produto</h2>
     </div>
     <div class="col-auto form-inline">
-        <form method="GET" action="{% url 'componente' %}">
+        <form method="GET" action="{% url 'itens_add' %}">
             <input type="text" name="msg" id="msg" value="ok" hidden>
+            <input type="text" name="proposta" id="proposta_id" value="{{proposta}}" hidden>
             <input type="text" name="filtro" id="filtro" value="none" hidden>
             <input type="text" name="find" id="find" class="form-control" style="max-width:300px;" value="{{find}}">
             <button type="submit" class="btn btn-light mr-3"><img src="{% static 'img/procurar.png' %}" width="20" height="20"></button>
         </form>
-        <a class="btn btn-light" href="{% url 'componente_add' %}"><img src="{% static 'img/adicionar.png' %}" width="20" height="20"></a>
     </div>
 </div>
 <hr>
@@ -32,61 +33,59 @@
     <table class="table table-striped">
         <thead>
             <tr class="thead-dark">
-                <th><input type="checkbox" ></th>
                 <th>
-                    <a class="text-light" href="{% url 'componente' %}?filtro=nome">Nome</a>
+                    <a class="text-light" href="{% url 'itens_add' %}?filtro=codigo&proposta={{proposta}}">Código</a>
+                    {% if filtro == 'codigo' %}
+                    <img src="{% static 'img/ordenarInv.png' %}" width="20" height="20">
+                    {% endif %}
+                </th>
+                <th>
+                    <a class="text-light" href="{% url 'itens_add' %}?filtro=nome&proposta={{proposta}}">Nome</a>
                     {% if filtro == 'nome' %}
                     <img src="{% static 'img/ordenarInv.png' %}" width="20" height="20">
                     {% endif %}
                 </th>
                 <th>
-                    <a class="text-light" href="{% url 'componente' %}?filtro=tipo">Tipo</a>
+                    <a class="text-light" href="{% url 'itens_add' %}?filtro=fabricante&proposta={{proposta}}">Fábricante</a>
+                    {% if filtro == 'fabricante' %}
+                    <img src="{% static 'img/ordenarInv.png' %}" width="20" height="20">
+                    {% endif %}
+                </th>
+                <th>
+                    <a class="text-light" href="{% url 'itens_add' %}?filtro=tipo&proposta={{proposta}}">Tipo</a>
                     {% if filtro == 'tipo' %}
                     <img src="{% static 'img/ordenarInv.png' %}" width="20" height="20">
                     {% endif %}
                 </th>
-                <th>
-                    <a class="text-light" href="{% url 'componente' %}?filtro=preco_compra">Preço Compra</a>
-                    {% if filtro == 'preco_compra' %}
-                    <img src="{% static 'img/ordenarInv.png' %}" width="20" height="20">
-                    {% endif %}
-                </th>
-                <th>
-                    <a class="text-light" href="{% url 'componente' %}?filtro=fator">Fator</a>
-                    {% if filtro == 'fator' %}
-                    <img src="{% static 'img/ordenarInv.png' %}" width="20" height="20">
-                    {% endif %}
-                </th>
-                <th>
-                    <a class="text-light" href="{% url 'componente' %}?filtro=preco_venda">Preço Venda</a>
-                    {% if filtro == 'preco_venda' %}
-                    <img src="{% static 'img/ordenarInv.png' %}" width="20" height="20">
-                    {% endif %}
-                </th>
+                
+                <th>Quantidade</th>
                 <th>--</th>
             </tr>
         </thead>
         <tbody>
             {% for i in dados %}
             <tr>
-                <td><input type="checkbox" ></td>
-                <td><a href="{% url 'componente_edit' %}?id={{i.pk}}">{{i.nome}}</a></td>
+                <td>{{i.codigo}}</td>
+                <td>{{i.nome}}</td>
+                <td>{{i.fabricante}}</td>
                 <td>{{i.tipo}}</td>
-                <td>R$ &nbsp; {{i.preco_compra}}</td>
-                <td>{{i.fator}}</td>
-                <td>R$ &nbsp; {{i.preco_venda}}</td>
-                <td><a onclick="del({{i.id}},'{{i.nome}}')" class="btn btn-light"><img src="{% static 'img/lixo.png' %}" width="20" height="20"></a></td>
+                <form action="{% url 'itens_add' %}" method="POST" target="_self">
+                    <td>
+                        {% csrf_token %}
+                        <input type="hidden" name="proposta_id" value="{{proposta}}">
+                        <input type="hidden" name="item_id" value="{{i.id}}">
+                        <div class="m-auto text-center">
+                            <input name="quantidade" class="text-center" style="max-width: 100px;" type="number" min="0"> 
+                        </div>
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-light"><img src="{% static 'img/adicionar.png' %}" width="20" height="20"></button>
+                    </td>
+                </form>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
-<script>
-    function del(val,nome){
-        var ret = confirm(`Deseja apagar ${nome}? \r todos os dados relacionados serão deletados!!`)  
-        if(ret){
-            document.location.href=`{% url 'componente_del' %}?id=${val}`
-        }      
-    }
-</script>
+
 {% endblock %}

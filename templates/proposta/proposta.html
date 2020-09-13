@@ -7,9 +7,9 @@
         <h2 class="h2 text-primary">{{dados.projeto}}</h2>
     </div>
     <div class="col-auto form-inline">
-        <a class="btn btn-primary mr-2" href="{% url 'proposta' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
-        <a class="btn btn-danger mr-2" onclick="del()"><img src="{% static 'img/lixo.png' %}" width="20" height="20"></a>
-        <a class="btn btn-primary mr-2" href="{% url 'conjunto_edit' %}?id={{dados.id}}"><img src="{% static 'img/editar.png' %}" width="20" height="20"></a>
+        <a class="btn btn-light mr-2" href="{% url 'proposta' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
+        <a class="btn btn-light mr-2" onclick="del()"><img src="{% static 'img/lixo.png' %}" width="20" height="20"></a>
+        <a class="btn btn-light mr-2" href="{% url 'proposta_edit' %}?id={{dados.id}}"><img src="{% static 'img/editar.png' %}" width="20" height="20"></a>
     </div>
 </div>
 <hr>
@@ -56,8 +56,8 @@
                         <h3 class="h3 text-primary">Itens</h3>
                     </div>
                     <div class="col-auto text-right mr-3">
-                        <a class="btn btn-primary mr-2" href="{% url 'componente' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
-                        <a href="{% url 'relacao_add' %}?conjunto_id={{dados.id}}" class="btn btn-primary"><img src="{% static 'img/adicionar.png' %}" height="20"></a>
+                        <a class="btn btn-light mr-2" href="{% url 'item' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
+                        <a href="{% url 'itens_add' %}?proposta={{dados.id}}&filtro=none&msg=ok&find=" class="btn btn-light"><img src="{% static 'img/adicionar.png' %}" height="20"></a>
                     </div>
                 </div>
                 <table class="table table-striped">
@@ -77,21 +77,21 @@
                             <td><a href="{% url 'componente_edit' %}?id={{i.componente.id}}">{{i.item.nome}}</a></td>
                             <td>R$ &nbsp;{{i.item.preco}}</td>
                             <td>
-                                <form id="q{{i.id}}" action="{% url 'relacao_alt' %}" method="POST">
+                                <form id="Iq{{i.id}}" action="{% url 'itens_alt' %}" method="POST">
                                     {% csrf_token %}
                                     <input name="proposta_id" type="hidden" value="{{dados.id}}">
                                     <input name="itens_id" type="hidden" value="{{i.id}}">
                                 <div class="m-auto text-center">
-                                    <input name="valor"  onchange="submit({{i.id}})" class="text-center" style="max-width: 100px;" type="number" min="0" value={{i.quantidade}}> 
+                                    <input name="valor"  onchange="submit({{i.id}},'I')" class="text-center" style="max-width: 100px;" type="number" min="0" value={{i.quantidade}}> 
                                 </div>
                                 </form>
                             </td>
                             <td>
-                                <form id="d{{i.id}}" action="{% url 'relacao_del' %}" method="POST">
+                                <form id="Id{{i.id}}" action="{% url 'itens_del' %}" method="POST">
                                     {% csrf_token %}
-                                    <input name="conjunto_id" type="hidden" value="{{dados.id}}">
-                                    <input name="relacao_id" type="hidden" value="{{i.id}}">
-                                    <a onclick="delRelacao({{i.id}},'{{i.componente.nome}}')" class="btn table-light"><img src="{% static 'img/lixo.png' %}" width="20" height="20"></a>
+                                    <input name="proposta_id" type="hidden" value="{{dados.id}}">
+                                    <input name="itens_id" type="hidden" value="{{i.id}}">
+                                    <a onclick="delRelacao({{i.id}},'{{i.item.nome}}','I')" class="btn table-light"><img src="{% static 'img/lixo.png' %}" width="20" height="20"></a>
                                 </form>
                             </td>
                         </tr>
@@ -110,8 +110,8 @@
                         <h3 class="h3 text-primary">Conjuntos</h3>
                     </div>
                     <div class="col-auto text-right mr-3">
-                        <a class="btn btn-primary mr-2" href="{% url 'componente' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
-                        <a href="{% url 'relacao_add' %}?conjunto_id={{dados.id}}" class="btn btn-primary"><img src="{% static 'img/adicionar.png' %}" height="20"></a>
+                        <a class="btn btn-light mr-2" href="{% url 'conjunto' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
+                        <a href="{% url 'conjuntos_add' %}?proposta={{dados.id}}" class="btn btn-light"><img src="{% static 'img/adicionar.png' %}" height="20"></a>
                     </div>
                 </div>
                 <table class="table table-striped">
@@ -131,21 +131,21 @@
                             <td>{{i.item.tipo}}</td>
                             <td>R$ &nbsp;{{i.item.valor}}</td>
                             <td>
-                                <form id="q{{i.id}}" action="{% url 'relacao_alt' %}" method="POST">
+                                <form id="Cq{{i.id}}" action="{% url 'conjuntos_alt' %}" method="POST">
                                     {% csrf_token %}
                                     <input name="proposta_id" type="hidden" value="{{dados.id}}">
-                                    <input name="conjuntos_id" type="hidden" value="{{i.id}}">
+                                    <input name="conjunto_id" type="hidden" value="{{i.id}}">
                                 <div class="m-auto text-center">
-                                    <input name="valor"  onchange="submit({{i.id}})" class="text-center" style="max-width: 100px;" type="number" min="0" value={{i.quantidade}}> 
+                                    <input name="valor"  onchange="submit({{i.id}},'C')" class="text-center" style="max-width: 100px;" type="number" min="0" value={{i.quantidade}}> 
                                 </div>
                                 </form>
                             </td>
                             <td>
-                                <form id="d{{i.id}}" action="{% url 'relacao_del' %}" method="POST">
+                                <form id="Cd{{i.id}}" action="{% url 'conjuntos_del' %}" method="POST">
                                     {% csrf_token %}
-                                    <input name="conjunto_id" type="hidden" value="{{dados.id}}">
-                                    <input name="relacao_id" type="hidden" value="{{i.id}}">
-                                    <a onclick="delRelacao({{i.id}},'{{i.componente.nome}}')" class="btn table-light"><img src="{% static 'img/lixo.png' %}" width="20" height="20"></a>
+                                    <input name="proposta_id" type="hidden" value="{{dados.id}}">
+                                    <input name="conjunto_id" type="hidden" value="{{i.id}}">
+                                    <a onclick="delRelacao({{i.id}},'{{i.item.nome}}','C')" class="btn table-light"><img src="{% static 'img/lixo.png' %}" width="20" height="20"></a>
                                 </form>
                             </td>
                         </tr>
@@ -164,8 +164,8 @@
                         <h3 class="h3 text-primary">Arquivos</h3>
                     </div>
                     <div class="col-auto text-right mr-3">
-                        <a class="btn btn-primary mr-2" href="{% url 'componente' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
-                        <a href="{% url 'relacao_add' %}?conjunto_id={{dados.id}}" class="btn btn-primary"><img src="{% static 'img/adicionar.png' %}" height="20"></a>
+                        <a class="btn btn-light mr-2" href="{% url 'componente' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
+                        <a href="{% url 'conjuntos_add' %}?conjunto={{dados.id}}" class="btn btn-light"><img src="{% static 'img/adicionar.png' %}" height="20"></a>
                     </div>
                 </div>
                 <div class="row bg-light border border-dark">
@@ -187,25 +187,19 @@
 </div>
 
 <script>
-    function submit(val){
-        document.getElementById(`q${val}`).submit()
+    function submit(val,init){
+        document.getElementById(`${init}q${val}`).submit()
     }
-    function delRelacao(val, nome){
-        var ret = confirm(`Deseja remover o Componente ${nome} do Conjuto?`)  
+    function delRelacao(val, nome, init){
+        var ret = confirm(`Deseja remover ${nome} da Proposta?`)  
         if(ret){
-            document.getElementById(`d${val}`).submit()
+            document.getElementById(`${init}d${val}`).submit()
         }
     }
     function del(){
-        var ret = confirm('Deseja apagar o Conjunto {{dados.nome}}? \r\n todos os dados relacionados serão deletados!!')  
+        var ret = confirm('Deseja apagar a Proposta {{dados.projeto}}? \r\n todos os dados relacionados serão deletados!!')  
         if(ret){
-            document.location.href="{% url 'conjunto_del' %}?id={{dados.id}}"
-        }      
-    }
-    function delResp(val){
-        var ret = confirm('Deseja apagar o Funcionario {{ funcionarios.funcionario.nome }}? \r\n todos os dados relacionados serão deletados!!')  
-        if(ret){
-            executDel(`{% url 'responsavel_del' %}?id=${val}`)
+            document.location.href="{% url 'proposta_del' %}?id={{dados.id}}"
         }      
     }
     function qtdAlt(id_rel){

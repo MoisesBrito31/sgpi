@@ -7,9 +7,9 @@
         <h2 class="h2 text-primary">{{dados.nome}}</h2>
     </div>
     <div class="col-auto form-inline">
-        <a class="btn btn-primary mr-2" href="{% url 'conjunto' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
-        <a class="btn btn-danger mr-2" onclick="del()"><img src="{% static 'img/lixo.png' %}" width="20" height="20"></a>
-        <a class="btn btn-primary mr-2" href="{% url 'conjunto_edit' %}?id={{dados.id}}"><img src="{% static 'img/editar.png' %}" width="20" height="20"></a>
+        <a class="btn btn-light mr-2" href="{% url 'conjunto' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
+        <a class="btn btn-light mr-2" onclick="del()"><img src="{% static 'img/lixo.png' %}" width="20" height="20"></a>
+        <a class="btn btn-light mr-2" href="{% url 'conjunto_edit' %}?id={{dados.id}}"><img src="{% static 'img/editar.png' %}" width="20" height="20"></a>
     </div>
 </div>
 <hr>
@@ -37,8 +37,8 @@
                         <h3 class="h3 text-primary">Itens do Conjunto</h3>
                     </div>
                     <div class="col-auto text-right mr-3">
-                        <a class="btn btn-primary mr-2" href="{% url 'componente' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
-                        <a href="{% url 'relacao_add' %}?conjunto_id={{dados.id}}" class="btn btn-primary"><img src="{% static 'img/adicionar.png' %}" height="20"></a>
+                        <a class="btn btn-light mr-2" href="{% url 'componente' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
+                        <a href="{% url 'relacao_add' %}?conjunto_id={{dados.id}}" class="btn btn-light"><img src="{% static 'img/adicionar.png' %}" height="20"></a>
                     </div>
                 </div>
                 <table class="table table-striped">
@@ -83,6 +83,33 @@
                 </table>
             </div>
             </div>
+        </div>
+        <div class="m-auto pt-5 mt-5">
+            <div class="modal-title text-center">
+                <h3 class="h3 text-center text-primary">Usado nos Projetos</h3>
+            </div>
+            <table class="table table-striped">
+                <thead class="table-dark text-center">
+                    <tr>
+                        <th><input type="checkbox"></th>
+                        <th>Cliente</th>
+                        <th>Projeto</th>
+                        <th>Tipo</th>
+                        <th>Quantidade</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    {% for p in projetos %}
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td><a href="{% url 'cliente_cliente' %}?id={{p.proposta.cliente.id}}">{{p.proposta.cliente}}</a></td>
+                        <td><a href="{% url 'proposta_proposta' %}?id={{p.proposta.id}}">{{p.proposta}}</td></a>
+                        <td>{{p.proposta.tipo}}</td>
+                        <td>{{p.quantidade}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
 </div>
 

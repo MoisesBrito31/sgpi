@@ -3,18 +3,19 @@
 {% load bootstrap4 %}
 {% block context %}
 
+
 <div class="text-center row">
     <div class="text-left col">
-        <h2 class="h2 text-primary">Conjuntos Montados</h2>
+        <h2 class="h2 text-primary">Adição de Conjunto</h2>
     </div>
     <div class="col-auto form-inline">
-        <form method="GET" action="{% url 'conjunto' %}">
+        <form method="GET" action="{% url 'conjuntos_add' %}">
             <input type="text" name="msg" id="msg" value="ok" hidden>
+            <input type="text" name="proposta" id="proposta_id" value="{{proposta}}" hidden>
             <input type="text" name="filtro" id="filtro" value="none" hidden>
             <input type="text" name="find" id="find" class="form-control" style="max-width:300px;" value="{{find}}">
             <button type="submit" class="btn btn-light mr-3"><img src="{% static 'img/procurar.png' %}" width="20" height="20"></button>
         </form>
-        <a class="btn btn-light" href="{% url 'conjunto_add' %}"><img src="{% static 'img/adicionar.png' %}" width="20" height="20"></a>
     </div>
 </div>
 <hr>
@@ -32,35 +33,49 @@
     <table class="table table-striped">
         <thead>
             <tr class="thead-dark">
-                <th><input type="checkbox" ></th>
                 <th>
-                    <a class="text-light" href="{% url 'conjunto' %}?filtro=nome">Nome</a>
+                    <a class="text-light" href="{% url 'conjuntos_add' %}?filtro=nome&proposta={{proposta}}">Nome</a>
                     {% if filtro == 'nome' %}
                     <img src="{% static 'img/ordenarInv.png' %}" width="20" height="20">
                     {% endif %}
                 </th>
                 <th>
-                    <a class="text-light" href="{% url 'conjunto' %}?filtro=tipo">Tipo</a>
+                    <a class="text-light" href="{% url 'conjuntos_add' %}?filtro=tipo&proposta={{proposta}}">Tipo</a>
                     {% if filtro == 'tipo' %}
                     <img src="{% static 'img/ordenarInv.png' %}" width="20" height="20">
                     {% endif %}
                 </th>
                 <th>
-                    <a class="text-light" href="{% url 'conjunto' %}?filtro=preco">Preço Venda</a>
-                    {% if filtro == 'preco' %}
+                    <a class="text-light" href="{% url 'conjuntos_add' %}?filtro=valor&proposta={{proposta}}">Valor</a>
+                    {% if filtro == 'valor' %}
                     <img src="{% static 'img/ordenarInv.png' %}" width="20" height="20">
                     {% endif %}
                 </th>
+                <th>Quantidade</th>
+                <th>--</th>
             </tr>
         </thead>
         <tbody>
             {% for i in dados %}
             <tr>
-                <td><input type="checkbox" ></td>
-                <td><a href="{% url 'conjunto_conjunto' %}?id={{i.pk}}">{{i.nome}}</a></td>
-                <td>{{i.tipo}}</td>
-                <td>R$ &nbsp; {{i.valor}}</td>
+               
+                <td>{{i.nome}}</td>
                 
+                <td>{{i.tipo}}</td>
+                <td>R$ &nbsp;{{i.valor}}</td>
+                <form action="{% url 'conjuntos_add' %}" method="POST" target="_self">
+                    <td>
+                        {% csrf_token %}
+                        <input type="hidden" name="proposta_id" value="{{proposta}}">
+                        <input type="hidden" name="conjunto_id" value="{{i.id}}">
+                        <div class="m-auto text-center">
+                            <input name="quantidade" class="text-center" style="max-width: 100px;" type="number" min="0"> 
+                        </div>
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-block btn-light"><img src="{% static 'img/adicionar.png' %}" width="20" height="20"></button>
+                    </td>
+                </form>
             </tr>
             {% endfor %}
         </tbody>

@@ -7,7 +7,7 @@
         <h2 class="h2 text-primary">Cadastro de Funcionário de Cliente</h2>
     </div>
     <div class="col-auto form-inline">
-        <a class="btn btn-primary" href="{% url 'cliente_cliente' %}?id={{clienteID}}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
+        <a class="btn btn-light" href="{% url 'cliente_cliente' %}?id={{clienteID}}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
     </div>
 </div>
 <hr>
@@ -29,7 +29,7 @@
         {% bootstrap_field dados.email %}
         {% bootstrap_field dados.telefone %}
         {% bootstrap_field dados.cargo %}
-        <button type="submit" class="btn btn-primary">Cadastrar</button>
+        <button type="submit" class="btn btn-block btn-primary">Cadastrar</button>
     </form>
 </div>
 

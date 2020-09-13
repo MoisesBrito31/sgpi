@@ -7,7 +7,7 @@
         <h2 class="h2 text-primary">Edição de Funcionário de Cliente</h2>
     </div>
     <div class="col-auto form-inline">
-        <a class="btn btn-primary" href="{% url 'cliente_cliente' %}?id={{clienteID}}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
+        <a class="btn btn-light" href="{% url 'cliente_cliente' %}?id={{clienteID}}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
     </div>
 </div>
 <hr>
@@ -27,7 +27,7 @@
         <input hidden name='cliente_id' id="cliente_id" value="{{clienteID}}">
         <input hidden name='id' id="id" value="{{id}}">
         {% bootstrap_form dados %}
-        <button type="submit" class="btn btn-primary">Atualizar</button>
+        <button type="submit" class="btn btn-block btn-primary">Atualizar</button>
     </form>
 </div>
 

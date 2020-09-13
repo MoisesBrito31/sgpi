@@ -7,9 +7,9 @@
         <h2 class="h2 text-primary">{{dados.nome}}</h2>
     </div>
     <div class="col-auto form-inline">
-        <a class="btn btn-primary mr-2" href="{% url 'cliente' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
-        <a class="btn btn-danger mr-2" onclick="del()"><img src="{% static 'img/lixo.png' %}" width="20" height="20"></a>
-        <a class="btn btn-primary mr-2" href="{% url 'cliente_edit' %}?id={{dados.id}}"><img src="{% static 'img/editar.png' %}" width="20" height="20"></a>
+        <a class="btn btn-light mr-2" href="{% url 'cliente' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
+        <a class="btn btn-light mr-2" onclick="del()"><img src="{% static 'img/lixo.png' %}" width="20" height="20"></a>
+        <a class="btn btn-light mr-2" href="{% url 'cliente_edit' %}?id={{dados.id}}"><img src="{% static 'img/editar.png' %}" width="20" height="20"></a>
     </div>
 </div>
 <hr>
@@ -40,7 +40,7 @@
                         <h3 class="h3 text-primary">Funcionários</h3>
                     </div>
                     <div class="col-auto text-right mr-3">
-                        <a href="{% url 'responsavel_add' %}?id={{dados.id}}" class="btn btn-primary"><img src="{% static 'img/adicionar.png' %}" height="20"></a>
+                        <a href="{% url 'responsavel_add' %}?id={{dados.id}}" class="btn btn-light"><img src="{% static 'img/adicionar.png' %}" height="20"></a>
                     </div>
                 </div>
                 <table class="table table-striped">
@@ -60,7 +60,7 @@
                             <td>{{f.funcionario.cargo}}</td>
                             <td>{{f.funcionario.email}}</td>
                             <td>{{f.funcionario.telefone}}</td>
-                            <td><a onclick="delResp({{f.funcionario.id}})" class="btn btn-danger"><img src="{% static 'img/lixo.png' %}" width="20" height="20"></a></td>
+                            <td><a onclick="delResp({{f.funcionario.id}})" class="btn btn-light"><img src="{% static 'img/lixo.png' %}" width="20" height="20"></a></td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -69,8 +69,13 @@
             </div>
             <div class="col">
             <div class="m-auto">
-                <div class="modal-title text-center">
-                    <h3 class="h3 text-center text-primary">Projetos</h3>
+                <div class="modal-title row">
+                    <div class="col text-center">
+                        <h3 class="h3 text-primary">Propostas</h3>
+                    </div>
+                    <div class="col-auto text-right mr-3">
+                        <a href="{% url 'proposta_add' %}?cliente_id={{dados.id}}" class="btn btn-light"><img src="{% static 'img/adicionar.png' %}" height="20"></a>
+                    </div>
                 </div>
                 <table class="table table-striped">
                     <thead class="table-dark text-center">
@@ -82,7 +87,7 @@
                     <tbody class="text-center">
                         {% for p in propostas %}
                         <tr>
-                            <td>{{p.projeto}}</td>
+                            <td><a href="{% url 'proposta_proposta' %}?id={{p.id}}">{{p.projeto}}</a></td>
                             <td>{{p.tipo}}</td>
                         </tr>
                         {% endfor %}

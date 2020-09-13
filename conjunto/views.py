@@ -30,7 +30,8 @@ class ConjuntoView(View):
             index = request.GET['id']
             form = Conjunto.objects.get(id=index)
             form2 = Relacao.objects.all().filter(conjunto=index)
-            return logado('conjunto/conjunto.html',request,context={'componentes':form2},dados=form,nivel_min=2)
+            form3 = ItemConjunto.objects.all().filter(item=index)
+            return logado('conjunto/conjunto.html',request,context={'componentes':form2,'projetos': form3},dados=form,nivel_min=2)
         except:
             return redirect('/erro') 
 
