@@ -1,0 +1,9 @@
+*.pyc
+
+.vscode
+
+.idea
+
+__pycache__
+
+

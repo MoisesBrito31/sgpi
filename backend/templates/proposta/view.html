@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% block context %}
+
+<div class="text-center row">
+    <div class="text-left col">
+        <h2 class="h2 text-primary">Propostas</h2>
+    </div>
+    <div class="col-auto form-inline">
+        <form method="GET" action="{% url 'proposta' %}">
+            <input type="text" name="msg" id="msg" value="ok" hidden>
+            <input type="text" name="filtro" id="filtro" value="none" hidden>
+            <input type="text" name="find" id="find" class="form-control" style="max-width:300px;" value="{{find}}">
+            <button type="submit" class="btn btn-light mr-3"><img src="{% static 'img/procurar.png' %}" width="20" height="20"></button>
+        </form>
+        <a class="btn btn-light" href="{% url 'proposta_add' %}"><img src="{% static 'img/adicionar.png' %}" width="20" height="20"></a>
+    </div>
+</div>
+<hr>
+{% if msg == 'gravado' %}
+    <div class="alert alert-success p-3">
+        <strong>Ação executada com Sucesso</strong>
+    </div>
+    {% endif %}
+    {% if msg == 'falha' %}
+    <div class="alert alert-danger p-3">
+        <strong>Falha ao Tentar executar a Ação</strong>
+    </div>
+    {% endif %}
+<div class="text-center">
+    <table class="table table-striped">
+        <thead>
+            <tr class="thead-dark">
+                <th>
+                    <a class="text-light" href="{% url 'proposta' %}?filtro=projeto">Projeto</a>
+                    {% if filtro == 'projeto' %}
+                    <img src="{% static 'img/ordenarInv.png' %}" width="20" height="20">
+                    {% endif %}
+                </th>
+                <th>
+                    <a class="text-light" href="{% url 'proposta' %}?filtro=tipo">Tipo</a>
+                    {% if filtro == 'tipo' %}
+                    <img src="{% static 'img/ordenarInv.png' %}" width="20" height="20">
+                    {% endif %}
+                </th>
+                <th>
+                    <a class="text-light" href="{% url 'proposta' %}?filtro=cliente">Cliente</a>
+                    {% if filtro == 'cliente' %}
+                    <img src="{% static 'img/ordenarInv.png' %}" width="20" height="20">
+                    {% endif %}
+                </th>
+                <th>
+                    <a class="text-light" href="{% url 'proposta' %}?filtro=datafinal">Data Final</a>
+                    {% if filtro == 'datafinal' %}
+                    <img src="{% static 'img/ordenarInv.png' %}" width="20" height="20">
+                    {% endif %}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in dados %}
+            <tr>
+                <td><a href="{% url 'proposta_proposta' %}?id={{i.pk}}">{{i.projeto}}</a></td>
+                <td>{{i.tipo}}</td>
+                <td>{{i.cliente}}</td>
+                <td>{{i.datafinal}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

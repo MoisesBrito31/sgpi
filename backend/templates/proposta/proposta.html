@@ -1,0 +1,242 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% load static %}
+{% block context %}
+<div class="text-center row">
+    <div class="text-left col">
+        <h2 class="h2 text-primary">{{dados.projeto}}</h2>
+    </div>
+    <div class="col-auto form-inline">
+        <a class="btn btn-light mr-2" href="{% url 'proposta' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
+        <a class="btn btn-light mr-2" onclick="del()"><img src="{% static 'img/lixo.png' %}" width="20" height="20"></a>
+        <a class="btn btn-light mr-2" href="{% url 'proposta_edit' %}?id={{dados.id}}"><img src="{% static 'img/editar.png' %}" width="20" height="20"></a>
+    </div>
+</div>
+<hr>
+
+<div class="p-3 m-auto">
+        <div class="row mb=3 pb-3">
+            <div class="col">
+                <strong class="text-primary">Cliente:</strong> <br>
+                <a>{{dados.cliente}}</a>
+            </div>
+            <div class="col-auto m-2">
+                <strong class="text-primary">Responsável:</strong> <br>
+                <a>{{dados.responsavel}}</a>
+            </div>
+            <div class="col-auto m-2">
+                <strong class="text-primary">Técnico:</strong> <br>
+                {{dados.tecnico}}
+            </div>
+            <div class="col-auto m-2">
+                <strong class="text-primary">Vendedor:</strong> <br>
+                {{dados.vendedor}}
+            </div>
+            <div class="col-auto m-2">
+                <strong class="text-primary">Criação:</strong> <br>
+                {{dados.datafinal}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <strong class="text-primary">Descrição:</strong> <br>
+                {{dados.descricao}}
+            </div>
+            <div class="col-auto">
+                <strong class="text-primary">Tipo:</strong> <br>
+                {{dados.tipo}}
+            </div>
+        </div>
+        <!--tabela de itens-->
+        <div class="row mt-5">
+            <div class="col">
+                <div class="m-auto">
+                <div class="modal-title row">
+                    <div class="col text-center">
+                        <h3 class="h3 text-primary">Itens</h3>
+                    </div>
+                    <div class="col-auto text-right mr-3">
+                        <a class="btn btn-light mr-2" href="{% url 'item' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
+                        <a href="{% url 'itens_add' %}?proposta={{dados.id}}&filtro=none&msg=ok&find=" class="btn btn-light"><img src="{% static 'img/adicionar.png' %}" height="20"></a>
+                    </div>
+                </div>
+                <table class="table table-striped">
+                    <thead class="table-dark text-center">
+                        <tr>
+                            <th>Código</th>
+                            <th>Modelo</th>
+                            <th>Preço Und.</th>
+                            <th>Quantidade</th>
+                            <th>-</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center">
+                        {% for i in itens %}
+                        <tr>
+                            <td>{{i.item.codigo}}</td>
+                            <td><a href="{% url 'componente_edit' %}?id={{i.componente.id}}">{{i.item.nome}}</a></td>
+                            <td>R$ &nbsp;{{i.item.preco}}</td>
+                            <td>
+                                <form id="Iq{{i.id}}" action="{% url 'itens_alt' %}" method="POST">
+                                    {% csrf_token %}
+                                    <input name="proposta_id" type="hidden" value="{{dados.id}}">
+                                    <input name="itens_id" type="hidden" value="{{i.id}}">
+                                <div class="m-auto text-center">
+                                    <input name="valor"  onchange="submit({{i.id}},'I')" class="text-center" style="max-width: 100px;" type="number" min="0" value={{i.quantidade}}> 
+                                </div>
+                                </form>
+                            </td>
+                            <td>
+                                <form id="Id{{i.id}}" action="{% url 'itens_del' %}" method="POST">
+                                    {% csrf_token %}
+                                    <input name="proposta_id" type="hidden" value="{{dados.id}}">
+                                    <input name="itens_id" type="hidden" value="{{i.id}}">
+                                    <a onclick="delRelacao({{i.id}},'{{i.item.nome}}','I')" class="btn table-light"><img src="{% static 'img/lixo.png' %}" width="20" height="20"></a>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            </div>
+        </div>
+        <!--Tabela de itens de conjuntos-->
+        <div class="row mt-5">
+            <div class="col">
+                <div class="m-auto">
+                <div class="modal-title row">
+                    <div class="col text-center">
+                        <h3 class="h3 text-primary">Conjuntos</h3>
+                    </div>
+                    <div class="col-auto text-right mr-3">
+                        <a class="btn btn-light mr-2" href="{% url 'conjunto' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
+                        <a href="{% url 'conjuntos_add' %}?proposta={{dados.id}}" class="btn btn-light"><img src="{% static 'img/adicionar.png' %}" height="20"></a>
+                    </div>
+                </div>
+                <table class="table table-striped">
+                    <thead class="table-dark text-center">
+                        <tr>
+                            <th>Nome</th>
+                            <th>Tipo</th>
+                            <th>Preço Und.</th>
+                            <th>Quantidade</th>
+                            <th>-</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center">
+                        {% for i in conjuntos %}
+                        <tr>
+                            <td><a href="{% url 'componente_edit' %}?id={{i.componente.id}}">{{i.item.nome}}</a></td>
+                            <td>{{i.item.tipo}}</td>
+                            <td>R$ &nbsp;{{i.item.valor}}</td>
+                            <td>
+                                <form id="Cq{{i.id}}" action="{% url 'conjuntos_alt' %}" method="POST">
+                                    {% csrf_token %}
+                                    <input name="proposta_id" type="hidden" value="{{dados.id}}">
+                                    <input name="conjunto_id" type="hidden" value="{{i.id}}">
+                                <div class="m-auto text-center">
+                                    <input name="valor"  onchange="submit({{i.id}},'C')" class="text-center" style="max-width: 100px;" type="number" min="0" value={{i.quantidade}}> 
+                                </div>
+                                </form>
+                            </td>
+                            <td>
+                                <form id="Cd{{i.id}}" action="{% url 'conjuntos_del' %}" method="POST">
+                                    {% csrf_token %}
+                                    <input name="proposta_id" type="hidden" value="{{dados.id}}">
+                                    <input name="conjunto_id" type="hidden" value="{{i.id}}">
+                                    <a onclick="delRelacao({{i.id}},'{{i.item.nome}}','C')" class="btn table-light"><img src="{% static 'img/lixo.png' %}" width="20" height="20"></a>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            </div>
+        </div>
+        <!--Lista de arquivos relacionados-->
+        <div class="row mt-5">
+            <div class="col">
+                <div class="m-auto">
+                <div class="modal-title row">
+                    <div class="col text-center">
+                        <h3 class="h3 text-primary">Arquivos</h3>
+                    </div>
+                    <div class="col-auto text-right mr-3">
+                        <a class="btn btn-light mr-2" href="{% url 'componente' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
+                        <a href="{% url 'conjuntos_add' %}?conjunto={{dados.id}}" class="btn btn-light"><img src="{% static 'img/adicionar.png' %}" height="20"></a>
+                    </div>
+                </div>
+                <div class="row bg-light border border-dark">
+                    {% for i in arquivos %}
+                    <div class="col mt-3 p-1 " style="max-width: 200px;">
+                        <div class="text-center">
+                            <h3 class="h6 text-primary">{{i.arquivo.tipo}}</h3>
+                        </div>
+                        <div class="p-2 m-2 text-center">
+                            <a target="_blank" href="{{i.arquivo.arquivo.url}}"><img src="{% static 'img/arquivo.png' %}" height="80"></a>
+                            <h3 class="h6 text-center mt-2">{{i.arquivo.nome}}</h3>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            </div>
+        </div>
+</div>
+
+<script>
+    function submit(val,init){
+        document.getElementById(`${init}q${val}`).submit()
+    }
+    function delRelacao(val, nome, init){
+        var ret = confirm(`Deseja remover ${nome} da Proposta?`)  
+        if(ret){
+            document.getElementById(`${init}d${val}`).submit()
+        }
+    }
+    function del(){
+        var ret = confirm('Deseja apagar a Proposta {{dados.projeto}}? \r\n todos os dados relacionados serão deletados!!')  
+        if(ret){
+            document.location.href="{% url 'proposta_del' %}?id={{dados.id}}"
+        }      
+    }
+    function qtdAlt(id_rel){
+        var val = document.getElementById(id_rel).value
+        url = `{% url 'relacao_alt' %}?relacao_id=${id_rel}&valor=${val}`
+        var xhp = new XMLHttpRequest()
+        xhp.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                var re = this.responseText
+                if (re='ok'){
+                    document.location.reload()
+                }
+                else{
+                    alert('Ocorreu uma Falha ao Processar o pedido')
+                }
+            }
+        }
+        xhp.open("Get", url)
+        xhp.send();
+    }
+    function executDel(url) {
+        var xhp = new XMLHttpRequest()
+        xhp.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                var re = this.responseText
+                //alert(re)
+                if (re='ok'){
+                    document.location.reload()
+                }
+                else{
+                    alert('Ocorreu uma Falha ao Processar o pedido')
+                }
+            }
+        }
+        xhp.open("Get", url)
+        xhp.send();
+    }
+</script>
+
+{% endblock %}

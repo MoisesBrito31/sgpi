@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% block context %}
+
+
+<div class="text-center row">
+    <div class="text-left col">
+        <h2 class="h2 text-primary">Adição de Produto</h2>
+    </div>
+    <div class="col-auto form-inline">
+        <form method="GET" action="{% url 'itens_add' %}">
+            <input type="text" name="msg" id="msg" value="ok" hidden>
+            <input type="text" name="proposta" id="proposta_id" value="{{proposta}}" hidden>
+            <input type="text" name="filtro" id="filtro" value="none" hidden>
+            <input type="text" name="find" id="find" class="form-control" style="max-width:300px;" value="{{find}}">
+            <button type="submit" class="btn btn-light mr-3"><img src="{% static 'img/procurar.png' %}" width="20" height="20"></button>
+        </form>
+    </div>
+</div>
+<hr>
+{% if msg == 'gravado' %}
+    <div class="alert alert-success p-3">
+        <strong>Ação executada com Sucesso</strong>
+    </div>
+    {% endif %}
+    {% if msg == 'falha' %}
+    <div class="alert alert-danger p-3">
+        <strong>Falha ao Tentar executar a Ação</strong>
+    </div>
+    {% endif %}
+<div class="text-center">
+    <table class="table table-striped">
+        <thead>
+            <tr class="thead-dark">
+                <th>
+                    <a class="text-light" href="{% url 'itens_add' %}?filtro=codigo&proposta={{proposta}}">Código</a>
+                    {% if filtro == 'codigo' %}
+                    <img src="{% static 'img/ordenarInv.png' %}" width="20" height="20">
+                    {% endif %}
+                </th>
+                <th>
+                    <a class="text-light" href="{% url 'itens_add' %}?filtro=nome&proposta={{proposta}}">Nome</a>
+                    {% if filtro == 'nome' %}
+                    <img src="{% static 'img/ordenarInv.png' %}" width="20" height="20">
+                    {% endif %}
+                </th>
+                <th>
+                    <a class="text-light" href="{% url 'itens_add' %}?filtro=fabricante&proposta={{proposta}}">Fábricante</a>
+                    {% if filtro == 'fabricante' %}
+                    <img src="{% static 'img/ordenarInv.png' %}" width="20" height="20">
+                    {% endif %}
+                </th>
+                <th>
+                    <a class="text-light" href="{% url 'itens_add' %}?filtro=tipo&proposta={{proposta}}">Tipo</a>
+                    {% if filtro == 'tipo' %}
+                    <img src="{% static 'img/ordenarInv.png' %}" width="20" height="20">
+                    {% endif %}
+                </th>
+                
+                <th>Quantidade</th>
+                <th>--</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in dados %}
+            <tr>
+                <td>{{i.codigo}}</td>
+                <td>{{i.nome}}</td>
+                <td>{{i.fabricante}}</td>
+                <td>{{i.tipo}}</td>
+                <form action="{% url 'itens_add' %}" method="POST" target="_self">
+                    <td>
+                        {% csrf_token %}
+                        <input type="hidden" name="proposta_id" value="{{proposta}}">
+                        <input type="hidden" name="item_id" value="{{i.id}}">
+                        <div class="m-auto text-center">
+                            <input name="quantidade" class="text-center" style="max-width: 100px;" type="number" min="0"> 
+                        </div>
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-light"><img src="{% static 'img/adicionar.png' %}" width="20" height="20"></button>
+                    </td>
+                </form>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

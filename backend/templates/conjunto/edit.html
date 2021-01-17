@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% load static %}
+{% block context %}
+<div class="text-center row">
+    <div class="text-left col">
+        <h2 class="h2 text-primary">Edição de Conjunto</h2>
+    </div>
+    <div class="col-auto form-inline">
+        <a class="btn btn-light mr-2" href="{% url 'conjunto' %}"><img src="{% static 'img/tabela.png' %}" width="20" height="20"></a>
+        <a class="btn btn-light mr-2" href="{% url 'conjunto_conjunto' %}?id={{id}}">Detalhes</a>
+    </div>
+</div>
+<hr>
+<div class="border p-3 m-auto" style="max-width: 800px;">
+    {% if msg == 'gravado' %}
+    <div class="alert alert-success p-3">
+        <strong>Cadastrado com Sucesso</strong>
+    </div>
+    {% endif %}
+    {% if msg == 'falha' %}
+    <div class="alert alert-danger p-3">
+        <strong>Falha ao Gravar no Banco</strong>
+    </div>
+    {% endif %}
+    <form action="{% url 'conjunto_edit' %}" method="POST" enctype="multipart/form-data" class="form">
+        {% csrf_token %}
+        <input hidden id="id" name="id" value="{{ id }}">
+        {% bootstrap_form dados %}
+        <div class="text-center mt-5 pt-5 mb-2">
+            <button class="btn btn-block btn-primary  text-center" type="submit">Alterar</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
