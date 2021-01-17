@@ -1,1 +1,0 @@
-web: gunicorn sgpi.wsgi --log-file -
