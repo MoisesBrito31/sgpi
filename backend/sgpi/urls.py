@@ -17,10 +17,14 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework.authtoken import views
+from rest_framework.authentication import TokenAuthentication
+from .router import rota
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('api.urls')),
+    path('api/',include(rota.urls)),
+    path('api-token-auth',views.obtain_auth_token,name='api_token'),
     path('', include('core.urls')),
     path('item', include('item.urls')),
     path('cliente', include('cliente.urls')),

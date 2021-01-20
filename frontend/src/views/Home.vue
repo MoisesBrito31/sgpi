@@ -1,18 +1,38 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <div v-for="(i,index) in Itens" :key="index">
+      <p>{{i.nome}}</p>
+      <p>{{i.preco}}</p>
+      <p>{{i.descricao}}</p>
+    </div>
+    
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
 
 export default {
   name: 'Home',
-  components: {
-    HelloWorld
+  data(){
+    return{
+      Itens:[]
+    }
+  },
+  async created(){
+    await this.load()
+  },
+  methods:{
+    async load(){
+      var res = await fetch("http://localhost:8000/api/itens/",{
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+          'Authorization': `Token ${window.localStorage.getItem('api-token')}` 
+        }
+      })
+      this.Itens = await res.json()
+      console.log(this.Itens)
+    }
   }
 }
 </script>

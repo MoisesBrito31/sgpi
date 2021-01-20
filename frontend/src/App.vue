@@ -8,7 +8,8 @@
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav>
         <b-nav-item href="/">Home</b-nav-item>
-        <b-nav-item href="/about">Home</b-nav-item>
+        <b-nav-item href="/about">sobre</b-nav-item>
+         <b-nav-item href="/login">Login</b-nav-item>
       </b-navbar-nav>
 
       <!-- Right aligned nav items -->
@@ -32,7 +33,7 @@
             <em>User</em>
           </template>
           <b-dropdown-item href="#">Profile</b-dropdown-item>
-          <b-dropdown-item href="#">Sign Out</b-dropdown-item>
+          <b-dropdown-item href="/" @click="logout" >Sign Out</b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
     </b-collapse>
@@ -42,6 +43,16 @@
   </div>
 </div>
 </template>
+
+<script>
+export default {
+  methods:{
+    logout(){
+      window.localStorage.removeItem('api-token')
+    }
+  }
+}
+</script>
 
 <style>
 #app {
