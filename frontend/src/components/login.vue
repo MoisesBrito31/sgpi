@@ -27,12 +27,20 @@
             </b-input-group>
         </b-form-group>
         <b-alert
-            variant="danger"
+            variant="warning"
             dismissible
             fade
             :show="loginFalha"
             @dismissed="showDismissibleAlert=false">
                 Usuário ou Senha Incorreto(s)!
+        </b-alert>
+        <b-alert
+            variant="danger"
+            dismissible
+            fade
+            :show="erro"
+            @dismissed="showDismissibleAlert=false">
+                falha no servidor
         </b-alert>
         <b-form-group class="mt-3 pt-3">
             <b-button @click="chamaLogin" v-bind:class="{disabled:!podelogar}"  block variant="primary">
@@ -51,7 +59,6 @@
             </div>
         </template>
     </b-overlay>
-    
 </div>
 </template>
 
@@ -59,6 +66,7 @@
 export default {
     data(){
         return{
+            erro:false,
             logado:false,
             loginFalha: false,
             espera:false,
@@ -70,6 +78,9 @@ export default {
                 password: ''
             }
         }
+    },
+    props:{
+        dominio: String,
     },
     computed:{
         userOK(){
@@ -107,27 +118,35 @@ export default {
                 }
         },
         async login() {
-            console.log('inicio...')
-            var res = await fetch(
-                'http://localhost:8000/api-token-auth',{
+            fetch(`${this.dominio}/api-token-auth`,{
                     method: 'post',
                     headers: {
                         'Content-Type': 'application/json;charset=utf-8'
                     },
                     body: JSON.stringify(this.user)
+            }).then(res=>{
+                if(res.status === 200){
+                    return res.json()
+                }else if(res.status===400) {
+                    this.loginFalha=true
+                    this.espera=false
+                }else{
+                    this.erro = true
+                    this.espera=false
+                    throw 'Erro - servidor fora do ar '
                 }
-            )
-            var resposta = await res.json()
-            if (resposta.token !== undefined){
-                window.localStorage.setItem('api-token',resposta.token)
-                this.logado = true
-                this.espera = false
-                setTimeout(function(){location.href='/'},1000)
-            }else{
-                this.loginFalha=true
-                this.espera=false
-            }
-            
+            }).then(result=>{
+                 console.log(result)
+                    if(result.token!==undefined){
+                        this.logado = true
+                        window.localStorage.setItem('api-token',result.token)
+                        this.$emit('logou',true)
+                    }else{
+                        this.erro = true
+                        this.espera=false
+                        throw 'Erro no servidor'
+                    }  
+            })
        },
        mostraSenha: function(){
            if(this.senhaShow===true){

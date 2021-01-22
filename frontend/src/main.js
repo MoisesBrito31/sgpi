@@ -9,7 +9,12 @@ Vue.config.productionTip = false
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 
+Vue.prototype.$frontend = "http://localhost:8000"
+
 new Vue({
   router,
+  created:function(){
+    this.dominio = "http://localhost:8000"
+  },
   render: h => h(App)
 }).$mount('#app')
