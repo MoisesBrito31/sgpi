@@ -1,11 +1,11 @@
 <template>
   <div>
-    <ItemTb dominio="http://localhost:8000"/>
+    <ItemTb dominio="http://10.0.0.105:8000"/>
   </div>
 </template>
 
 <script>
-import ItemTb from '../components/Item-tb.vue'
+import ItemTb from '../components/Item/Table'
 export default {
   name: 'Home',
   components:{

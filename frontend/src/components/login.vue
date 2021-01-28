@@ -40,7 +40,7 @@
             fade
             :show="erro"
             @dismissed="showDismissibleAlert=false">
-                falha no servidor
+                falha no servidor {{erroDetalhes}}
         </b-alert>
         <b-form-group class="mt-3 pt-3">
             <b-button @click="chamaLogin" v-bind:class="{disabled:!podelogar}"  block variant="primary">
@@ -66,6 +66,7 @@
 export default {
     data(){
         return{
+            erroDetalhes:'',
             erro:false,
             logado:false,
             loginFalha: false,
@@ -146,6 +147,11 @@ export default {
                         this.espera=false
                         throw 'Erro no servidor'
                     }  
+            }).catch(erro=>{
+                this.erroDetalhes = `--- ${erro}`
+                this.erro = true
+                this.espera=false
+                console.log(erro)
             })
        },
        mostraSenha: function(){
