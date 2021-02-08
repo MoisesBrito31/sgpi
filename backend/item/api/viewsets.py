@@ -31,8 +31,16 @@ class FabricanteViewSet(ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
 class ItensViewSet(ModelViewSet):
-    queryset = Item.objects.all()
     serializer_class = ItensSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
+    def get_queryset(self):
+        queryset = Item.objects.all()
+        fabri = self.request.query_params.get('fabricante',None)
+        if fabri is not None:
+            queryset = queryset.filter(fabricante=fabri)
+        tipo = self.request.query_params.get('tipo',None)
+        if tipo is not None:
+            queryset = queryset.filter(tipo=tipo)
+        return queryset
     

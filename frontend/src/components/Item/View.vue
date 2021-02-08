@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="animate__animated animate__fadeInDown">
     <b-modal size="lg" v-model="showModalEdit" ok-only>
         <ItemEdit :itemID=itemID :dominio=dominio @cadastrou="editou"/>
     </b-modal>

@@ -1,15 +1,15 @@
 <template>
   <div>
-    <ItemView :itemID=65 dominio="http://10.0.0.105:8000"/>
+    <ClienteView dominio="http://10.0.0.105:8000" />
   </div>
 </template>
 
 <script>
-import ItemView from '../components/Item/View'
+import ClienteView from '../components/cliente/Table'
 export default {
   name:'AboutView',
   components:{
-    ItemView
+    ClienteView
   }
 }
 </script>
